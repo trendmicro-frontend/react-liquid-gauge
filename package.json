@@ -1,0 +1,72 @@
+{
+  "name": "react-liquid-gauge",
+  "version": "0.5.0",
+  "description": "React Liquid Gauge component",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "prepublish": "npm run lint && npm test && npm run build",
+    "build": "rm -f lib/*; babel --out-dir ./lib ./src",
+    "build-examples": "cd examples; webpack",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint --fix ./src",
+    "precommit-check": "npm run lint",
+    "test": "./babel-tap --coverage test/*.js",
+    "coveralls": "./babel-tap --coverage --coverage-report=text-lcov test/*.js | node_modules/.bin/coveralls",
+    "webpack-dev-server": "cd examples; webpack-dev-server --hot --inline --host 0.0.0.0 --port 8000"
+  },
+  "pre-commit": [
+    "precommit-check"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trendmicro-frontend/react-liquid-gauge.git"
+  },
+  "author": "Cheton Wu <cheton@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/trendmicro-frontend/react-liquid-gauge/issues"
+  },
+  "homepage": "https://github.com/trendmicro-frontend/react-liquid-gauge",
+  "keywords": [
+    "react",
+    "react-component",
+    "liquid",
+    "gauge"
+  ],
+  "peerDependencies": {
+    "react": "^0.14.0 || ^15.0.0",
+    "react-dom": "^0.14.0 || ^15.0.0"
+  },
+  "dependencies": {
+    "d3-ease": "^1.0.2",
+    "d3-interpolate": "^1.1.2",
+    "d3-scale": "^1.0.4",
+    "d3-selection": "^1.0.3",
+    "d3-shape": "^1.0.4",
+    "d3-timer": "^1.0.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.2",
+    "babel-eslint": "^7.1.1",
+    "babel-loader": "^6.2.8",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "coveralls": "^2.11.15",
+    "eslint": "^3.11.0",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^3.0.1",
+    "eslint-plugin-react": "^6.7.1",
+    "react": "^0.14.0 || ^15.0.0",
+    "react-dom": "^0.14.0 || ^15.0.0",
+    "tap": "^8.0.1",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2"
+  }
+}
