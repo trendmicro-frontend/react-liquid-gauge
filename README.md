@@ -113,3 +113,152 @@ ReactDOM.render(
     document.getElementById('container')
 );
 ```
+
+## API
+
+### Properties
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th style="width: 100px;">Name</th>
+      <th style="width: 50px;">Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>value</td>
+      <td>Number</td>
+      <td>100</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>animate</td>
+      <td>Boolean</td>
+      <td>false</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>onAnimationProgress</td>
+      <td>Function(options)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>onAnimationEnd</td>
+      <td>Function(options)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>onClick</td>
+      <td>Function(event)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>outerRadius</td>
+      <td>Number</td>
+      <td>1.0</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>innerRadius</td>
+      <td>Number</td>
+      <td>0.9</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>margin</td>
+      <td>Number</td>
+      <td>0.025</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>ease</td>
+      <td>Function</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>animationTime</td>
+      <td>Number</td>
+      <td>2000</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>amplitude</td>
+      <td>Number</td>
+      <td>1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>frequency</td>
+      <td>Number</td>
+      <td>5</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>outerArcStyle</td>
+      <td>Shape</td>
+      <td>{ fill: 'rgb(23, 139, 202)' }</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>liquidStyle</td>
+      <td>Shape</td>
+      <td>{ fill: 'rgb(23, 139, 202)' }</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>liquidNumberStyle</td>
+      <td>Shape</td>
+      <td>{ fill: 'rgb(164, 219, 248)' }</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>numberStyle</td>
+      <td>Shape</td>
+      <td>{ fill: 'rgb(4, 86, 129)' }</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>offsetX</td>
+      <td>Number</td>
+      <td>1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>offsetY</td>
+      <td>Number</td>
+      <td>1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>textSize</td>
+      <td>Number</td>
+      <td>1</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>textOffsetX</td>
+      <td>Number</td>
+      <td>0</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>textOffsetY</td>
+      <td>Number</td>
+      <td>0</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>percentageSymbol</td>
+      <td>String</td>
+      <td>%</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
