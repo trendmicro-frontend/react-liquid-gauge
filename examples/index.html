@@ -6,17 +6,13 @@
 <title>react-liquid-gauge</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
 <link href="app.css" rel="stylesheet" type="text/css">
 <style>
 html, body {
     color: #333;
     font-family: Arial, Helvetica, sans-serif;
-}
-.page-title {
-    font-weight: bold;
-    font-size: 64px;
-    text-align: center;
 }
 a {
     color: #333;
@@ -28,16 +24,20 @@ a:hover {
 </style>
 </head>
 <body>
-    <div class="row">
-        <div class="col-sm-12" style="margin-bottom: 1em;">
-            <h1 class="page-title">
-                <a href="https://github.com/trendmicro-frontend/react-liquid-gauge">React Liquid Gauge</a>
-            </h1>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">React Liquid Gauge</a>
+            </div>
         </div>
-        <div class="col-sm-12">
-            <div id="container"></div>
-        </div>
-    </div>
+    </nav>
+    <div id="container"></div>
     <script src="bundle.js"></script>
 </body>
 </html>
