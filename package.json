@@ -7,9 +7,11 @@
     "lib"
   ],
   "scripts": {
-    "prepublish": "npm run lint && npm test && npm run build",
-    "build": "rm -f lib/*; babel --out-dir ./lib ./src",
-    "build-examples": "cd examples; webpack",
+    "prepublish": "npm run lint && npm test && npm run clean && npm run build && npm run build-examples",
+    "build": "babel --out-dir ./lib ./src",
+    "build-examples": "cd examples; webpack; cp -af index.html ../docs/index.html",
+    "clean": "rm -f lib/*",
+    "demo": "http-server -p 8000 docs/",
     "lint": "eslint ./src",
     "lint:fix": "eslint --fix ./src",
     "precommit-check": "npm run lint",
