@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import shallowCompare from 'react-addons-shallow-compare';
 import { timer } from 'd3-timer';
 import { arc, area } from 'd3-shape';
 import * as ease from 'd3-ease';
@@ -110,6 +111,9 @@ class LiquidFillGauge extends Component {
             return;
         }
         this.draw();
+    }
+    shouldComponentUpdate(nextProps, nextState) {
+        return shallowCompare(this, nextProps, nextState);
     }
     setRes() {
         const width = (this.props.width * this.props.innerRadius) / 2;

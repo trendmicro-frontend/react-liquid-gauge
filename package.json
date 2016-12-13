@@ -46,7 +46,8 @@
     "d3-scale": "^1.0.4",
     "d3-selection": "^1.0.3",
     "d3-shape": "^1.0.4",
-    "d3-timer": "^1.0.3"
+    "d3-timer": "^1.0.3",
+    "react-addons-shallow-compare": "^0.14.0 || ^15.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
