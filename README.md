@@ -123,8 +123,8 @@ ReactDOM.render(
     <tr>
       <th align="left">Name</th>
       <th align="left">Type</th>
-      <th>Default</th>
-      <th>Description</th>
+      <th align="left">Default</th>
+      <th align="left">Description</th>
     </tr>
   </thead>
   <tbody>
