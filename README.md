@@ -118,11 +118,11 @@ ReactDOM.render(
 
 ### Properties
 
-<table class="table table-bordered table-striped">
+<table>
   <thead>
     <tr>
-      <th style="width: 100px;">Name</th>
-      <th style="width: 50px;">Type</th>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
       <th>Default</th>
       <th>Description</th>
     </tr>
