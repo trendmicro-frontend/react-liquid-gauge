@@ -38,12 +38,7 @@ class App extends Component {
             <div>
                 <LiquidFillGauge
                     animate
-                    onAnimationProgress={(options) => {
-                        const { value, outerArc, liquid } = options;
-                        const fillColor = `rgb(${rgbcolor(value).join(',')})`;
-                        outerArc.attr('fill', fillColor);
-                        liquid.attr('fill', fillColor);
-                    }}
+                    gradient
                     outerArcStyle={{
                         fill: fillColor
                     }}
@@ -56,8 +51,8 @@ class App extends Component {
                     numberStyle={{
                         fill: 'rgb(0, 0, 0)'
                     }}
-                    width={240}
-                    height={240}
+                    width={400}
+                    height={400}
                     style={{ margin: '0 auto' }}
                     value={this.state.value}
                     textOffsetX={0}

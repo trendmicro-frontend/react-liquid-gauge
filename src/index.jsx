@@ -1,11 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import shallowCompare from 'react-addons-shallow-compare';
+import { color } from 'd3-color';
 import { timer } from 'd3-timer';
 import { arc, area } from 'd3-shape';
 import * as ease from 'd3-ease';
 import { select } from 'd3-selection';
 import { scaleLinear } from 'd3-scale';
 import { interpolate } from 'd3-interpolate';
+import Gradient from './Gradient';
 
 /**
  * PropType for fill and stroke..
@@ -25,12 +27,20 @@ class LiquidFillGauge extends Component {
         onAnimationProgress: PropTypes.func,
         // callback function called when animation is done
         onAnimationEnd: PropTypes.func,
+        // on click
         onClick: PropTypes.func,
         // comes from Chart parent
         width: PropTypes.number,
         // comes from Chart parent
         height: PropTypes.number,
-        // innerRadius
+        // gradient effect
+        gradient: PropTypes.bool,
+        gradientStops: PropTypes.oneOfType([
+            PropTypes.arrayOf(PropTypes.object),
+            PropTypes.arrayOf(PropTypes.node),
+            PropTypes.node
+        ]),
+        // inner radius
         innerRadius: PropTypes.number,
         // outer radius
         outerRadius: PropTypes.number,
@@ -44,7 +54,6 @@ class LiquidFillGauge extends Component {
         amplitude: PropTypes.number,
         // the wave frequency inverse, the higer the number the fewer the waves
         frequency: PropTypes.number,
-        // on click
         // The fill and stroke for the outer arc
         outerArcStyle: fillStroke,
         // The fill and stroke for the liquid
@@ -53,8 +62,6 @@ class LiquidFillGauge extends Component {
         liquidNumberStyle: fillStroke,
         // the fill and stroke of the number that is not drenched in liquid
         numberStyle: fillStroke,
-        offsetY: PropTypes.number,
-        offsetX: PropTypes.number,
         // The relative height of the text to display in the wave circle. 1 = 50%
         textSize: PropTypes.number,
         textOffsetX: PropTypes.number,
@@ -77,7 +84,7 @@ class LiquidFillGauge extends Component {
         ease: ease.easeCubicInOut,
         animationTime: 2000,
         amplitude: 1,
-        frequency: 5,
+        frequency: 8,
         outerArcStyle: {
             fill: 'rgb(23, 139, 202)'
         },
@@ -90,8 +97,6 @@ class LiquidFillGauge extends Component {
         numberStyle: {
             fill: 'rgb(4, 86, 129)'
         },
-        offsetX: 1,
-        offsetY: 1,
         textSize: 1,
         textOffsetX: 0,
         textOffsetY: 0,
@@ -140,7 +145,7 @@ class LiquidFillGauge extends Component {
                 return this.x(i);
             })
             .y0((d, i) => {
-                return this.y((this.props.amplitude * Math.sin(i / 4)) + this.props.value);
+                return this.y((this.props.amplitude * Math.sin(i / this.props.frequency)) + this.props.value);
             })
             .y1(d => {
                 return this.props.height / 2;
@@ -173,7 +178,8 @@ class LiquidFillGauge extends Component {
                 outerArc: select(this.container).select('.outerArc'),
                 liquid: select(this.container).select('.liquid'),
                 liquidNumber: select(this.container).select('.liquidNumber'),
-                number: select(this.container).select('.number')
+                number: select(this.container).select('.number'),
+                gradient: select(this.gradient).select('#gradient')
             });
 
             this.wave.attr('d', val(this.arr));
@@ -187,7 +193,8 @@ class LiquidFillGauge extends Component {
                     outerArc: select(this.container).select('.outerArc'),
                     liquid: select(this.container).select('.liquid'),
                     liquidNumber: select(this.container).select('.liquidNumber'),
-                    number: select(this.container).select('.number')
+                    number: select(this.container).select('.number'),
+                    gradient: select(this.gradient).select('#gradient')
                 });
             }
         });
@@ -203,9 +210,27 @@ class LiquidFillGauge extends Component {
             .innerRadius(this.props.innerRadius * radius)
             .startAngle(0)
             .endAngle(Math.PI * 2);
-        const cX = (this.props.width * this.props.offsetX) / 2;
-        const cY = (this.props.height * this.props.offsetY) / 2;
+        const cX = (this.props.width / 2);
+        const cY = (this.props.height / 2);
         const textPixels = (this.props.textSize * radius / 2);
+        const fillColor = this.props.liquidStyle.fill;
+        const gradientStops = this.props.gradientStops || [
+            {
+                stopColor: color(fillColor).darker(0.5).toString(),
+                stopOpacity: 1,
+                offset: '0%'
+            },
+            {
+                stopColor: fillColor,
+                stopOpacity: 0.75,
+                offset: '50%'
+            },
+            {
+                stopColor: color(fillColor).brighter(0.5).toString(),
+                stopOpacity: 0.5,
+                offset: '100%'
+            }
+        ];
 
         return (
             <div
@@ -248,7 +273,7 @@ class LiquidFillGauge extends Component {
                             <circle
                                 className="liquid"
                                 r={liquidRadius}
-                                fill={this.props.liquidStyle.fill}
+                                fill={this.props.gradient ? 'url(#gradient)' : this.props.liquidStyle.fill}
                             />
                             <text
                                 className="liquidNumber"
@@ -280,6 +305,16 @@ class LiquidFillGauge extends Component {
                             }}
                         />
                     </g>
+                    <Gradient id="gradient">
+                        {gradientStops.map((stop, index) => {
+                            if (!React.isValidElement(stop)) {
+                                return (
+                                    <stop key={index} {...stop} />
+                                );
+                            }
+                            return stop;
+                        })}
+                    </Gradient>
                 </svg>
             </div>
         );
