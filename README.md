@@ -153,6 +153,18 @@ ReactDOM.render(
       <td></td>
     </tr>
     <tr>
+      <td>gradient</td>
+      <td>Boolean</td>
+      <td>false</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>gradientStops</td>
+      <td>Array</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
       <td>onClick</td>
       <td>Function(event)</td>
       <td></td>
