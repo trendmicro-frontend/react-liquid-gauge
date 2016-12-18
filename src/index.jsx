@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import shallowCompare from 'react-addons-shallow-compare';
 import { color } from 'd3-color';
-import { timer } from 'd3-timer';
-import { arc, area } from 'd3-shape';
 import * as ease from 'd3-ease';
-import { select } from 'd3-selection';
-import { scaleLinear } from 'd3-scale';
 import { interpolate } from 'd3-interpolate';
+import { scaleLinear } from 'd3-scale';
+import { select } from 'd3-selection';
+import { arc, area } from 'd3-shape';
+import { timer } from 'd3-timer';
+import 'd3-transition';
 import Gradient from './Gradient';
 
 /**
@@ -19,41 +20,66 @@ const fillStroke = PropTypes.shape({
 
 class LiquidFillGauge extends Component {
     static propTypes = {
-        // a percentage from 0 to 100
-        value: PropTypes.number,
-        // boolean if true then animate
-        animate: PropTypes.bool,
-        // callback function called when animation is in progress
-        onAnimationProgress: PropTypes.func,
-        // callback function called when animation is done
-        onAnimationEnd: PropTypes.func,
-        // on click
-        onClick: PropTypes.func,
-        // comes from Chart parent
+        // The width of the component
         width: PropTypes.number,
-        // comes from Chart parent
+        // The height of the component
         height: PropTypes.number,
-        // gradient effect
+
+        // The percentage value (0-100)
+        value: PropTypes.number,
+        // The percentage symbol (%)
+        percentageSymbol: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.bool
+        ]),
+
+        // The relative height of the text to display in the wave circle. 1 = 50%
+        textSize: PropTypes.number,
+        textOffsetX: PropTypes.number,
+        textOffsetY: PropTypes.number,
+
+        // Whether to animate the chart
+        animation: PropTypes.bool,
+        // The animation length in milliseconds
+        animationDuration: PropTypes.number,
+        // The name of d3 easing function
+        animationEasing: PropTypes.string,
+        // Will fire on animation progression
+        onAnimationProgress: PropTypes.func,
+        // Will fire on animation completion
+        onAnimationComplete: PropTypes.func,
+
+        // Control if the wave scrolls or is static
+        waveAnimation: PropTypes.bool,
+        // The wave animation length in milliseconds
+        waveAnimationDuration: PropTypes.number,
+        // The name of d3 easing function
+        waveAnimationEasing: PropTypes.string,
+
+        // Whether to apply linear gradients to fill the liquid element
         gradient: PropTypes.bool,
+        // An array of the <stop> SVG element defines the ramp of colors to use on a gradient, which is a child element to either the <linearGradient> or the <radialGradient> element
         gradientStops: PropTypes.oneOfType([
             PropTypes.arrayOf(PropTypes.object),
             PropTypes.arrayOf(PropTypes.node),
             PropTypes.node
         ]),
-        // inner radius
+
+        // The click handler callback function
+        onClick: PropTypes.func,
+
+        // The radius of the inner circle
         innerRadius: PropTypes.number,
-        // outer radius
+        // The radius of the outer circle
         outerRadius: PropTypes.number,
-        // margin between inner liquid and innerRadius
+        // The margin between inner liquid and inner radius
         margin: PropTypes.number,
-        // d3 easing functions
-        ease: PropTypes.func,
-        // animation Time
-        animationTime: PropTypes.number,
-        // the wave amplitude
+
+        // The wave amplitude
         amplitude: PropTypes.number,
-        // the wave frequency inverse, the higer the number the fewer the waves
+        // The wave frequency inverse, the higer the number the fewer the waves
         frequency: PropTypes.number,
+
         // The fill and stroke for the outer arc
         outerArcStyle: fillStroke,
         // The fill and stroke for the liquid
@@ -61,30 +87,33 @@ class LiquidFillGauge extends Component {
         // The fill and stroke for the number part that is drenched in liquid
         liquidNumberStyle: fillStroke,
         // the fill and stroke of the number that is not drenched in liquid
-        numberStyle: fillStroke,
-        // The relative height of the text to display in the wave circle. 1 = 50%
-        textSize: PropTypes.number,
-        textOffsetX: PropTypes.number,
-        textOffsetY: PropTypes.number,
-        percentageSymbol: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.bool
-        ])
+        numberStyle: fillStroke
     };
 
     static defaultProps = {
-        value: 100,
-        animate: false,
+        width: 400,
+        height: 400,
+        value: 0,
+        percentageSymbol: '%',
+        textSize: 1,
+        textOffsetX: 0,
+        textOffsetY: 0,
+        animation: false,
+        animationDuration: 2000,
+        animationEasing: 'easeCubicInOut',
         onAnimationProgress: () => {},
-        onAnimationEnd: () => {},
+        onAnimationComplete: () => {},
+        waveAnimation: true,
+        waveAnimationDuration: 2000,
+        waveAnimationEasing: 'easeLinear',
+        gradient: false,
+        gradientStops: null,
         onClick: () => {},
-        outerRadius: 1.0,
         innerRadius: 0.9,
+        outerRadius: 1.0,
         margin: 0.025,
-        ease: ease.easeCubicInOut,
-        animationTime: 2000,
         amplitude: 1,
-        frequency: 8,
+        frequency: 4,
         outerArcStyle: {
             fill: 'rgb(23, 139, 202)'
         },
@@ -96,22 +125,18 @@ class LiquidFillGauge extends Component {
         },
         numberStyle: {
             fill: 'rgb(4, 86, 129)'
-        },
-        textSize: 1,
-        textOffsetX: 0,
-        textOffsetY: 0,
-        percentageSymbol: '%'
+        }
     };
 
     componentDidMount() {
-        if (this.props.animate) {
+        if (this.props.animation) {
             this.animate();
             return;
         }
         this.draw();
     }
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.animate) {
+        if (this.props.animation) {
             this.animate();
             return;
         }
@@ -121,7 +146,7 @@ class LiquidFillGauge extends Component {
         return shallowCompare(this, nextProps, nextState);
     }
     setRes() {
-        const width = (this.props.width * this.props.innerRadius) / 2;
+        const width = (this.props.width * (this.props.innerRadius - this.props.margin)) / 2;
         const height = (this.props.height * (this.props.innerRadius - this.props.margin)) / 2;
 
         this.arr = new Array(100);
@@ -131,7 +156,7 @@ class LiquidFillGauge extends Component {
             .selectAll('text')
             .selectAll('tspan.value');
         this.x = scaleLinear()
-            .range([-width, width])
+            .range([-width * 2, width * 2])
             .domain([0, 100]);
         this.y = scaleLinear()
             .range([height, -height])
@@ -140,66 +165,88 @@ class LiquidFillGauge extends Component {
     draw() {
         this.setRes();
 
-        const val = area()
-            .x((d, i) => {
-                return this.x(i);
-            })
-            .y0((d, i) => {
-                return this.y((this.props.amplitude * Math.sin(i / this.props.frequency)) + this.props.value);
-            })
-            .y1(d => {
-                return this.props.height / 2;
-            });
-
-        this.wave.attr('d', val(this.arr));
-        this.text.text(Math.round(this.props.value));
+        const { amplitude, frequency, value, height } = this.props;
+        const clipArea = area()
+            .x((d, i) => this.x(i))
+            .y0((d, i) => this.y((amplitude * Math.sin(i / frequency)) + value))
+            .y1(d => (height / 2));
+        this.wave.attr('d', clipArea(this.arr));
+        this.text.text(Math.round(value));
     }
     animate() {
         this.setRes();
 
-        const val = area()
+        const clipArea = area()
             .x((d, i) => this.x(i))
-            .y0((d, i) => this.y(Math.sin(i / 4)))
-            .y1(d => this.props.height / 2);
-        const time = scaleLinear().range([0, 1]).domain([0, this.props.animationTime]);
+            .y1(d => (this.props.height / 2));
+
+        const waveScale = scaleLinear()
+            .range([0, this.props.amplitude, 0])
+            .domain([0, 50, 100]);
+
+        if (this.props.waveAnimation) {
+            this.animateWave();
+        }
+
+        const time = scaleLinear()
+            .range([0, 1])
+            .domain([0, this.props.animationDuration]);
+        // If the wave does not have an old value, then interpolate from 0 to value, else old to value.
         const interpolateValue = interpolate(this.wave.node().old || 0, this.props.value);
-        const { onAnimationProgress, onAnimationEnd } = this.props;
+        const animationEasing = ease[this.props.animationEasing] ? ease[this.props.animationEasing] : ease[this.defaultProps.animationEasing];
         const animationTimer = timer((t) => {
-            const animate = this.props.ease(time(t));
+            const { frequency } = this.props;
+            const value = interpolateValue(animationEasing(time(t)));
 
-            val.y0((d, i) => {
-                return this.y((this.props.amplitude * Math.sin(i / this.props.frequency)) + interpolateValue(animate));
-            });
+            clipArea.y0((d, i) => this.y((waveScale(value) * Math.sin(i / frequency)) + value));
 
-            const value = Math.round(interpolateValue(animate));
-            this.text.text(value);
-            onAnimationProgress({
+            this.text.text(Math.round(value));
+            this.wave.attr('d', clipArea(this.arr));
+            this.props.onAnimationProgress({
                 value,
-                outerArc: select(this.container).select('.outerArc'),
-                liquid: select(this.container).select('.liquid'),
-                liquidNumber: select(this.container).select('.liquidNumber'),
-                number: select(this.container).select('.number'),
-                gradient: select(this.gradient).select('#gradient')
+                container: select(this.container)
             });
 
-            this.wave.attr('d', val(this.arr));
-
-            if (t > this.props.animationTime) {
+            if (t >= this.props.animationDuration) {
                 animationTimer.stop();
-                const value = Math.round(this.props.value);
-                this.text.text(value);
-                onAnimationEnd({
+
+                const value = interpolateValue(1);
+
+                clipArea.y0((d, i) => this.y((waveScale(value) * Math.sin(i / frequency)) + value));
+
+                this.text.text(Math.round(value));
+                this.wave.attr('d', clipArea(this.arr));
+
+                this.props.onAnimationComplete({
                     value,
-                    outerArc: select(this.container).select('.outerArc'),
-                    liquid: select(this.container).select('.liquid'),
-                    liquidNumber: select(this.container).select('.liquidNumber'),
-                    number: select(this.container).select('.number'),
-                    gradient: select(this.gradient).select('#gradient')
+                    container: select(this.container)
                 });
             }
         });
 
+        // Store the old node value so that we can animate from that point again
         this.wave.node().old = this.props.value;
+    }
+    animateWave() {
+        const width = (this.props.width * (this.props.innerRadius - this.props.margin)) / 2;
+        const waveAnimationScale = scaleLinear()
+            .range([-width / 2, width / 2])
+            .domain([0, 1]);
+        const waveAnimationEasing = ease[this.props.waveAnimationEasing] ? ease[this.props.waveAnimationEasing] : ease[this.defaultProps.waveAnimationEasing];
+
+        this.wave
+            .attr('transform', 'translate(' + waveAnimationScale(this.wave.attr('T')) + ', 0)')
+            .transition()
+            .duration(this.props.waveAnimationDuration * (1 - this.wave.attr('T')))
+            .ease(waveAnimationEasing)
+            .attr('transform', 'translate(' + waveAnimationScale(1) + ', 0)')
+            .attr('T', 1)
+            .on('end', () => {
+                this.wave.attr('T', 0);
+                if (this.props.waveAnimation) {
+                    this.animateWave();
+                }
+            });
     }
     render() {
         const { style } = this.props;
