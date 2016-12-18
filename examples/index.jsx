@@ -49,9 +49,19 @@ class App extends Component {
         return (
             <div>
                 <LiquidFillGauge
-                    animate
+                    style={{ margin: '0 auto' }}
+                    width={400}
+                    height={400}
+                    value={this.state.value}
+                    textOffsetX={0}
+                    textOffsetY={0}
+                    animation
+                    waveAnimation
+                    waveAnimationEasing="easeLinear"
                     gradient
                     gradientStops={gradientStops}
+                    amplitude={1}
+                    frequency={4}
                     outerArcStyle={{
                         fill: fillColor
                     }}
@@ -64,12 +74,6 @@ class App extends Component {
                     numberStyle={{
                         fill: 'rgb(0, 0, 0)'
                     }}
-                    width={400}
-                    height={400}
-                    style={{ margin: '0 auto' }}
-                    value={this.state.value}
-                    textOffsetX={0}
-                    textOffsetY={0}
                     onClick={() => {
                         this.setState({ value: Math.random() * 100 });
                     }}
