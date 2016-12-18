@@ -216,16 +216,19 @@ class LiquidFillGauge extends Component {
         const fillColor = this.props.liquidStyle.fill;
         const gradientStops = this.props.gradientStops || [
             {
+                key: '0%',
                 stopColor: color(fillColor).darker(0.5).toString(),
                 stopOpacity: 1,
                 offset: '0%'
             },
             {
+                key: '50%',
                 stopColor: fillColor,
                 stopOpacity: 0.75,
                 offset: '50%'
             },
             {
+                key: '100%',
                 stopColor: color(fillColor).brighter(0.5).toString(),
                 stopOpacity: 0.5,
                 offset: '100%'
