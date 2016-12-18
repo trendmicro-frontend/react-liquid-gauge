@@ -1,44 +1,57 @@
+import { color } from 'd3-color';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import LiquidFillGauge from '../src';
 
-const rgbcolor = (value) => {
-    const startColor = {
-        red: 0x64,
-        green: 0x95,
-        blue: 0xed
-    };
-    const endColor = {
-        red: 0xdc,
-        green: 0x14,
-        blue: 0x3c
-    };
-
-    const diffRed = endColor.red - startColor.red;
-    const diffGreen = endColor.green - startColor.green;
-    const diffBlue = endColor.blue - startColor.blue;
+const pickColor = (value, startColor, endColor) => {
+    const diffRed = color(endColor).r - color(startColor).r;
+    const diffGreen = color(endColor).g - color(startColor).g;
+    const diffBlue = color(endColor).b - color(startColor).b;
     const percentFade = value / 100;
 
-    return [
-        Math.floor(diffRed * percentFade) + startColor.red,
-        Math.floor(diffGreen * percentFade) + startColor.green,
-        Math.floor(diffBlue * percentFade) + startColor.blue
-    ];
+    return 'rgb(' + [
+        (Math.floor(diffRed * percentFade) + color(startColor).r) % 256,
+        (Math.floor(diffGreen * percentFade) + color(startColor).g) % 256,
+        (Math.floor(diffBlue * percentFade) + color(startColor).b) % 256
+    ].join(' ,') + ')';
 };
 
 class App extends Component {
     state = {
         value: Math.round(Math.random() * 100)
     };
+    startColor = '#6495ed'; // cornflowerblue
+    endColor = '#dc143c'; // crimson
 
     render() {
-        const fillColor = `rgb(${rgbcolor(this.state.value).join(',')})`;
+        const fillColor = pickColor(this.state.value, this.startColor, this.endColor);
+        const gradientStops = [
+            {
+                key: '0%',
+                stopColor: color(fillColor).darker(0.5).toString(),
+                stopOpacity: 1,
+                offset: '0%'
+            },
+            {
+                key: '50%',
+                stopColor: fillColor,
+                stopOpacity: 0.75,
+                offset: '50%'
+            },
+            {
+                key: '100%',
+                stopColor: color(fillColor).brighter(0.5).toString(),
+                stopOpacity: 0.5,
+                offset: '100%'
+            }
+        ];
 
         return (
             <div>
                 <LiquidFillGauge
                     animate
                     gradient
+                    gradientStops={gradientStops}
                     outerArcStyle={{
                         fill: fillColor
                     }}
@@ -81,7 +94,6 @@ class App extends Component {
         );
     }
 }
-
 
 ReactDOM.render(
     <App />,
