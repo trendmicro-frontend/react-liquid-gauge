@@ -19,6 +19,7 @@ npm install --save react react-dom react-liquid-gauge
 ### Usage
 
 ```js
+import { color } from 'd3-color';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import LiquidFillGauge from 'react-liquid-gauge';
@@ -54,29 +55,37 @@ class App extends Component {
 
     render() {
         const fillColor = `rgb(${rgbcolor(this.state.value).join(',')})`;
+        const gradientStops = [
+            {
+                key: '0%',
+                stopColor: color(fillColor).darker(0.5).toString(),
+                stopOpacity: 1,
+                offset: '0%'
+            },
+            {
+                key: '50%',
+                stopColor: fillColor,
+                stopOpacity: 0.75,
+                offset: '50%'
+            },
+            {
+                key: '100%',
+                stopColor: color(fillColor).brighter(0.5).toString(),
+                stopOpacity: 0.5,
+                offset: '100%'
+            }
+        ];
 
         return (
             <div>
                 <LiquidFillGauge
                     animate
-                    onAnimationProgress={(options) => {
-                        const { value, outerArc, liquid } = options;
-                        const fillColor = `rgb(${rgbcolor(value).join(',')})`;
-                        outerArc.attr('fill', fillColor);
-                        liquid.attr('fill', fillColor);
-                    }}
-                    outerArcStyle={{
-                        fill: fillColor
-                    }}
-                    liquidStyle={{
-                        fill: fillColor
-                    }}
-                    liquidNumberStyle={{
-                        fill: 'rgb(255, 255, 255)'
-                    }}
-                    numberStyle={{
-                        fill: 'rgb(0, 0, 0)'
-                    }}
+                    gradient
+                    gradientStops={gradientStops}
+                    outerArcStyle={{ fill: fillColor }}
+                    liquidStyle={{ fill: fillColor }}
+                    liquidNumberStyle={{ fill: 'rgb(255, 255, 255)' }}
+                    numberStyle={{ fill: 'rgb(0, 0, 0)' }}
                     width={240}
                     height={240}
                     style={{ margin: '0 auto' }}
