@@ -6,15 +6,27 @@ module.exports = {
     devtool: 'source-map',
     entry: path.resolve(__dirname, 'index.jsx'),
     output: {
-        path: path.join(__dirname),
+        path: path.join(__dirname, '../docs'),
         filename: 'bundle.js'
     },
     module: {
+        preLoaders: [
+            // http://survivejs.com/webpack_react/linting_in_webpack/
+            {
+                test: /\.jsx?$/,
+                loaders: ['eslint'],
+                exclude: /node_modules/
+            }
+        ],
         loaders: [
+            {
+                test: /\.json$/,
+                loader: 'json'
+            },
             {
                 test: /\.jsx?$/,
                 loader: 'babel',
-                exclude: /node_modules/
+                exclude: /(node_modules|bower_components)/
             }
         ]
     },
