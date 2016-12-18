@@ -308,8 +308,9 @@ class LiquidFillGauge extends Component {
                     <Gradient id="gradient">
                         {gradientStops.map((stop, index) => {
                             if (!React.isValidElement(stop)) {
+                                const key = stop.key || index;
                                 return (
-                                    <stop key={index} {...stop} />
+                                    <stop key={key} {...stop} />
                                 );
                             }
                             return stop;
