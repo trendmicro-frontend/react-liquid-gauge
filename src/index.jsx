@@ -33,12 +33,12 @@ class LiquidFillGauge extends Component {
             PropTypes.bool
         ]),
 
-        // The relative height of the text to display in the wave circle. 1 = 50%
+        // The relative height of the text to display in the wave circle. 1 = 50%.
         textSize: PropTypes.number,
         textOffsetX: PropTypes.number,
         textOffsetY: PropTypes.number,
 
-        // Whether to animate the chart
+        // Whether to animate the chart.
         animation: PropTypes.bool,
         // The amount of time in milliseconds to animate the chart.
         animationDuration: PropTypes.number,
@@ -56,9 +56,9 @@ class LiquidFillGauge extends Component {
         // The d3 easing function name.
         waveAnimationEasing: PropTypes.string,
 
-        // Whether to apply linear gradients to fill the liquid element
+        // Whether to apply linear gradients to fill the liquid element.
         gradient: PropTypes.bool,
-        // An array of the <stop> SVG element defines the ramp of colors to use on a gradient, which is a child element to either the <linearGradient> or the <radialGradient> element
+        // An array of the <stop> SVG element defines the ramp of colors to use on a gradient, which is a child element to either the <linearGradient> or the <radialGradient> element.
         gradientStops: PropTypes.oneOfType([
             PropTypes.arrayOf(PropTypes.object),
             PropTypes.arrayOf(PropTypes.node),
