@@ -255,19 +255,19 @@ ReactDOM.render(
       <td>innerRadius</td>
       <td>Number</td>
       <td>0.9</td>
-      <td>The radius of the inner circle. A value of 0.9 equals 90% of the radius.</td>
+      <td>The radius of the inner circle. A value of 0.9 equals 90% of the radius of the outer circle.</td>
     </tr>
     <tr>
       <td>outerRadius</td>
       <td>Number</td>
       <td>1.0</td>
-      <td>The radius of the outer circle. A value of 1 equals 100% of the radius.</td>
+      <td>The radius of the outer circle. A value of 1 equals 100% of the radius of the outer circle.</td>
     </tr>
     <tr>
       <td>margin</td>
       <td>Number</td>
       <td>0.025</td>
-      <td>The size of the gap between the outer circle and wave circle as a percentage of the radius of the outer circle. A value of 0.025 equals 2.5% of the radius.</td>
+      <td>The size of the gap between the outer circle and wave circle as a percentage of the radius of the outer circle. A value of 0.025 equals 2.5% of the radius of the outer circle.</td>
     </tr>
     <tr>
       <td>circleStyle</td>
