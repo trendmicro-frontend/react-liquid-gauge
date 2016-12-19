@@ -13,7 +13,7 @@ The [sample code](https://github.com/trendmicro-frontend/react-liquid-gauge/blob
 ## Installation
 
 ```
-npm install --save react react-dom react-liquid-gauge
+npm install --save react react-liquid-gauge
 ```
 
 ### Usage
