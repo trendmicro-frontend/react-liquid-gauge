@@ -20,14 +20,14 @@ const fillStroke = PropTypes.shape({
 
 class LiquidFillGauge extends Component {
     static propTypes = {
-        // The width of the component
+        // The width of the component.
         width: PropTypes.number,
-        // The height of the component
+        // The height of the component.
         height: PropTypes.number,
 
-        // The percentage value (0-100)
+        // The percentage value (0-100).
         value: PropTypes.number,
-        // The percentage symbol (%)
+        // The percentage symbol (%).
         percentageSymbol: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.bool
@@ -40,21 +40,29 @@ class LiquidFillGauge extends Component {
 
         // Whether to animate the chart
         animation: PropTypes.bool,
-        // The animation length in milliseconds
+        // The amount of time in milliseconds to animate the chart.
         animationDuration: PropTypes.number,
-        // The name of d3 easing function
+        // The d3 easing function name.
         animationEasing: PropTypes.string,
-        // Will fire on animation progression
+        // Will fire on animation progression.
         onAnimationProgress: PropTypes.func,
-        // Will fire on animation completion
+        // Will fire on animation completion.
         onAnimationComplete: PropTypes.func,
 
-        // Control if the wave scrolls or is static
+        // Controls if the wave scrolls or is static.
         waveAnimation: PropTypes.bool,
-        // The wave animation length in milliseconds
+        // The amount of time in milliseconds for a full wave to enter the wave circle.
         waveAnimationDuration: PropTypes.number,
-        // The name of d3 easing function
+        // The d3 easing function name.
         waveAnimationEasing: PropTypes.string,
+        // The wave height as a percentage of the radius of the wave circle.
+        waveHeight: PropTypes.number,
+        // The number of full waves per width of the wave circle.
+        waveCount: PropTypes.number,
+        // The amount to initially offset the wave.
+        // 0 = no offset
+        // 1 = offset of one full wave
+        waveOffset: PropTypes.number,
 
         // Whether to apply linear gradients to fill the liquid element
         gradient: PropTypes.bool,
@@ -65,28 +73,28 @@ class LiquidFillGauge extends Component {
             PropTypes.node
         ]),
 
-        // The click handler callback function
+        // The click handler callback function.
         onClick: PropTypes.func,
 
-        // The radius of the inner circle
+        // The radius of the inner circle.
         innerRadius: PropTypes.number,
-        // The radius of the outer circle
+        // The radius of the outer circle.
         outerRadius: PropTypes.number,
-        // The margin between inner liquid and inner radius
+        // The margin between inner liquid and inner radius.
         margin: PropTypes.number,
 
-        // The wave amplitude
+        // The wave amplitude.
         amplitude: PropTypes.number,
-        // The wave frequency inverse, the higer the number the fewer the waves
+        // The wave frequency inverse, the higer the number the fewer the waves.
         frequency: PropTypes.number,
 
-        // The fill and stroke for the outer arc
+        // The fill and stroke for the outer arc.
         outerArcStyle: fillStroke,
-        // The fill and stroke for the liquid
+        // The fill and stroke for the liquid.
         liquidStyle: fillStroke,
-        // The fill and stroke for the number part that is drenched in liquid
+        // The fill and stroke for the number part that is drenched in liquid.
         liquidNumberStyle: fillStroke,
-        // the fill and stroke of the number that is not drenched in liquid
+        // The fill and stroke of the number that is not drenched in liquid.
         numberStyle: fillStroke
     };
 
