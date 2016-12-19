@@ -57,7 +57,6 @@ class App extends Component {
                     textOffsetY={0}
                     animation
                     waveAnimation
-                    waveAnimationEasing="easeLinear"
                     gradient
                     gradientStops={gradientStops}
                     amplitude={1}
