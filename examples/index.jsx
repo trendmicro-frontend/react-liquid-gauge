@@ -18,7 +18,7 @@ const pickColor = (value, startColor, endColor) => {
 
 class App extends Component {
     state = {
-        value: 50 //Math.round(Math.random() * 100)
+        value: 50
     };
     startColor = '#6495ed'; // cornflowerblue
     endColor = '#dc143c'; // crimson
