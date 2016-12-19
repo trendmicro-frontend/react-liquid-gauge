@@ -203,14 +203,14 @@ ReactDOM.render(
     <tr>
       <td>onAnimationProgress</td>
       <td>Function</td>
-      <td>Will fire on animation progression.</td>
       <td></td>
+      <td>Will fire on animation progression.</td>
     </tr>
     <tr>
       <td>onAnimationComplete</td>
       <td>Function</td>
-      <td>Will fire on animation completion.</td>
       <td></td>
+      <td>Will fire on animation completion.</td>
     </tr>
     <tr>
       <td>waveAnimation</td>
@@ -281,25 +281,27 @@ ReactDOM.render(
     <tr>
       <td>outerArcStyle</td>
       <td>Object</td>
-      <td>{ fill: 'rgb(23, 139, 202)' }</td>
+      <td>{ fill: 'rgb(23, 139, 202)', stroke: '' }</td>
       <td>The fill and stroke for the outer arc.</td>
     </tr>
     <tr>
       <td>liquidStyle</td>
       <td>Object</td>
-      <td>{ fill: 'rgb(23, 139, 202)' }</td>
+      <td>{ fill: 'rgb(23, 139, 202)', stroke: '' }</td>
       <td>The fill and stroke for the liquid.</td>
     </tr>
     <tr>
       <td>liquidNumberStyle</td>
       <td>Object</td>
-      <td>{ fill: 'rgb(164, 219, 248)' }</td>
-      <td>The fill and stroke for the number part that is drenched in liquid.</td>
+      <td>{ fill: 'rgb(164, 219, 248)', stroke: '' }</td>
+      <td>
+        The fill and stroke for the number part that is drenched in liquid.
+      </td>
     </tr>
     <tr>
       <td>numberStyle</td>
       <td>Object</td>
-      <td>{ fill: 'rgb(4, 86, 129)' }</td>
+      <td>{ fill: 'rgb(4, 86, 129)', stroke: '' }</td>
       <td>The fill and stroke of the number that is not drenched in liquid.</td>
     </tr>
   </tbody>
