@@ -197,7 +197,7 @@ ReactDOM.render(
       <td>animationEasing</td>
       <td>String</td>
       <td>'easeCubicInOut'</td>
-      <td>[d3-ease](https://github.com/d3/d3-ease) function name. See the [easing explorer](http://bl.ocks.org/mbostock/248bac3b8e354a9103c4) for a visual demostration.</td>
+      <td><a href="https://github.com/d3/d3-ease">d3-ease</a> function name. See the <a href="http://bl.ocks.org/mbostock/248bac3b8e354a9103c4">easing explorer</a> for a visual demostration.</td>
     </tr>
     <tr>
       <td>onAnimationProgress</td>
@@ -227,7 +227,7 @@ ReactDOM.render(
       <td>waveAnimationEasing</td>
       <td>String</td>
       <td>'easeLinear'</td>
-      <td>[d3-ease](https://github.com/d3/d3-ease) function name. See the [easing explorer](http://bl.ocks.org/mbostock/248bac3b8e354a9103c4) for a visual demostration.</td>
+      <td><a href="https://github.com/d3/d3-ease">d3-ease</a> function name. See the <a href="http://bl.ocks.org/mbostock/248bac3b8e354a9103c4">easing explorer</a> for a visual demostration.</td>
     </tr>
     <tr>
       <td>gradient</td>
