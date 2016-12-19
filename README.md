@@ -182,34 +182,34 @@ ReactDOM.render(
       <td></td>
     </tr>
     <tr>
-      <td>animation</td>
+      <td>riseAnimation</td>
       <td>Boolean</td>
       <td>false</td>
-      <td>Whether to animate the chart.</td>
+      <td>Controls if the wave should rise from 0 to it's full height, or start at it's full height.</td>
     </tr>
     <tr>
-      <td>animationDuration</td>
+      <td>riseAnimationTime</td>
       <td>Number</td>
       <td>2000</td>
-      <td>The amount of time in milliseconds to animate the chart.</td>
+      <td>The amount of time in milliseconds for the wave to rise from 0 to it's final height.</td>
     </tr>
     <tr>
-      <td>animationEasing</td>
+      <td>riseAnimationEasing</td>
       <td>String</td>
       <td>'easeCubicInOut'</td>
-      <td><a href="https://github.com/d3/d3-ease">d3-ease</a> function name. See the <a href="http://bl.ocks.org/mbostock/248bac3b8e354a9103c4">easing explorer</a> for a visual demostration.</td>
+      <td><a href="https://github.com/d3/d3-ease">d3-ease</a> options. See the <a href="http://bl.ocks.org/mbostock/248bac3b8e354a9103c4">easing explorer</a> for a visual demostration.</td>
     </tr>
     <tr>
-      <td>onAnimationProgress</td>
+      <td>riseAnimationOnProgress</td>
       <td>Function</td>
       <td></td>
-      <td>Will fire on animation progression.</td>
+      <td>Progress callback function.</td>
     </tr>
     <tr>
-      <td>onAnimationComplete</td>
+      <td>riseAnimationOnComplete</td>
       <td>Function</td>
       <td></td>
-      <td>Will fire on animation completion.</td>
+      <td>Complete callback function.</td>
     </tr>
     <tr>
       <td>waveAnimation</td>
@@ -218,7 +218,7 @@ ReactDOM.render(
       <td>Controls if the wave scrolls or is static.</td>
     </tr>
     <tr>
-      <td>waveAnimationDuration</td>
+      <td>waveAnimationTime</td>
       <td>Number</td>
       <td>2000</td>
       <td>The amount of time in milliseconds for a full wave to enter the wave circle.</td>
@@ -227,13 +227,25 @@ ReactDOM.render(
       <td>waveAnimationEasing</td>
       <td>String</td>
       <td>'easeLinear'</td>
-      <td><a href="https://github.com/d3/d3-ease">d3-ease</a> function name. See the <a href="http://bl.ocks.org/mbostock/248bac3b8e354a9103c4">easing explorer</a> for a visual demostration.</td>
+      <td><a href="https://github.com/d3/d3-ease">d3-ease</a> options. See the <a href="http://bl.ocks.org/mbostock/248bac3b8e354a9103c4">easing explorer</a> for a visual demostration.</td>
+    </tr>
+    <tr>
+      <td>waveAmplitude</td>
+      <td>Number</td>
+      <td>1</td>
+      <td>The wave height as a percentage of the radius of the wave circle.</td>
+    </tr>
+    <tr>
+      <td>waveFrequency</td>
+      <td>Number</td>
+      <td>2</td>
+      <td>The number of full waves per width of the wave circle.</td>
     </tr>
     <tr>
       <td>gradient</td>
       <td>Boolean</td>
       <td>false</td>
-      <td>Whether to apply linear gradients to fill the liquid element.</td>
+      <td>Whether to apply linear gradients to fill the wave circle.</td>
     </tr>
     <tr>
       <td>gradientStops</td>
@@ -245,7 +257,7 @@ ReactDOM.render(
       <td>onClick</td>
       <td>Function</td>
       <td></td>
-      <td>The click handler callback function.</td>
+      <td>onClick event handler.</td>
     </tr>
     <tr>
       <td>innerRadius</td>
@@ -263,45 +275,31 @@ ReactDOM.render(
       <td>margin</td>
       <td>Number</td>
       <td>0.025</td>
-      <td>The margin between inner liquid and inner radius.</td>
+      <td>The size of the gap between the outer circle and wave circle as a percentage of the outer circle's radius.</td>
     </tr>
     <tr>
-      <td>amplitude</td>
-      <td>Number</td>
-      <td>1</td>
-      <td>The wave amplitude.</td>
-    </tr>
-    <tr>
-      <td>frequency</td>
-      <td>Number</td>
-      <td>4</td>
-      <td>The wave frequency inverse, the higer the number the fewer the waves.</td>
-    </tr>
-    <tr>
-      <td>outerArcStyle</td>
+      <td>circleStyle</td>
       <td>Object</td>
       <td>{ fill: 'rgb(23, 139, 202)', stroke: '' }</td>
-      <td>The fill and stroke for the outer arc.</td>
+      <td>The fill and stroke of the outer circle.</td>
     </tr>
     <tr>
-      <td>liquidStyle</td>
+      <td>waveStyle</td>
       <td>Object</td>
       <td>{ fill: 'rgb(23, 139, 202)', stroke: '' }</td>
-      <td>The fill and stroke for the liquid.</td>
+      <td>The fill and stroke of the fill wave.</td>
     </tr>
     <tr>
-      <td>liquidNumberStyle</td>
+      <td>textStyle</td>
       <td>Object</td>
-      <td>{ fill: 'rgb(164, 219, 248)', stroke: '' }</td>
-      <td>
-        The fill and stroke for the number part that is drenched in liquid.
-      </td>
+      <td>{ fill: 'rgb(0, 0, 0)', stroke: '' }</td>
+      <td>The fill and stroke of the value text when the wave does not overlap it.</td>
     </tr>
     <tr>
-      <td>numberStyle</td>
+      <td>waveTextStyle</td>
       <td>Object</td>
-      <td>{ fill: 'rgb(4, 86, 129)', stroke: '' }</td>
-      <td>The fill and stroke of the number that is not drenched in liquid.</td>
+      <td>{ fill: 'rgb(255, 255, 255)', stroke: '' }</td>
+      <td>The fill and stroke of the value text when the wave overlaps it.</td>
     </tr>
   </tbody>
 </table>
