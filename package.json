@@ -9,7 +9,7 @@
   "scripts": {
     "prepublish": "npm run lint && npm test && npm run clean && npm run build && npm run build-examples",
     "build": "babel --out-dir ./lib ./src",
-    "build-examples": "cd examples; webpack; cp -af index.html ../docs/index.html",
+    "build-examples": "cd examples; webpack",
     "clean": "rm -f lib/*",
     "demo": "http-server -p 8000 docs/",
     "lint": "eslint ./src",
@@ -65,6 +65,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.8.0",
+    "html-webpack-plugin": "^2.24.1",
     "react": "^0.14.0 || ^15.0.0",
     "react-dom": "^0.14.0 || ^15.0.0",
     "tap": "^8.0.1",
