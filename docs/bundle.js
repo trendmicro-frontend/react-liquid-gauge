@@ -136,7 +136,6 @@
 	                    textOffsetY: 0,
 	                    animation: true,
 	                    waveAnimation: true,
-	                    waveAnimationEasing: 'easeLinear',
 	                    gradient: true,
 	                    gradientStops: gradientStops,
 	                    amplitude: 1,
@@ -22480,66 +22479,66 @@
 	
 	    return LiquidFillGauge;
 	}(_react.Component), _class.propTypes = {
-	    // The width of the component
+	    // The width of the component.
 	    width: _react.PropTypes.number,
-	    // The height of the component
+	    // The height of the component.
 	    height: _react.PropTypes.number,
 	
-	    // The percentage value (0-100)
+	    // The percentage value (0-100).
 	    value: _react.PropTypes.number,
-	    // The percentage symbol (%)
+	    // The percentage symbol (%).
 	    percentageSymbol: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.bool]),
 	
-	    // The relative height of the text to display in the wave circle. 1 = 50%
+	    // The relative height of the text to display in the wave circle. 1 = 50%.
 	    textSize: _react.PropTypes.number,
 	    textOffsetX: _react.PropTypes.number,
 	    textOffsetY: _react.PropTypes.number,
 	
-	    // Whether to animate the chart
+	    // Whether to animate the chart.
 	    animation: _react.PropTypes.bool,
-	    // The animation length in milliseconds
+	    // The amount of time in milliseconds to animate the chart.
 	    animationDuration: _react.PropTypes.number,
-	    // The name of d3 easing function
+	    // [d3-ease](https://github.com/d3/d3-ease) function name. See the [easing explorer](http://bl.ocks. org/mbostock/248bac3b8e354a9103c4) for a visual demostration.
 	    animationEasing: _react.PropTypes.string,
-	    // Will fire on animation progression
+	    // Will fire on animation progression.
 	    onAnimationProgress: _react.PropTypes.func,
-	    // Will fire on animation completion
+	    // Will fire on animation completion.
 	    onAnimationComplete: _react.PropTypes.func,
 	
-	    // Control if the wave scrolls or is static
+	    // Controls if the wave scrolls or is static.
 	    waveAnimation: _react.PropTypes.bool,
-	    // The wave animation length in milliseconds
+	    // The amount of time in milliseconds for a full wave to enter the wave circle.
 	    waveAnimationDuration: _react.PropTypes.number,
-	    // The name of d3 easing function
+	    // [d3-ease](https://github.com/d3/d3-ease) function name. See the [easing explorer](http://bl.ocks. org/mbostock/248bac3b8e354a9103c4) for a visual demostration.
 	    waveAnimationEasing: _react.PropTypes.string,
 	
-	    // Whether to apply linear gradients to fill the liquid element
+	    // Whether to apply linear gradients to fill the liquid element.
 	    gradient: _react.PropTypes.bool,
-	    // An array of the <stop> SVG element defines the ramp of colors to use on a gradient, which is a child element to either the <linearGradient> or the <radialGradient> element
+	    // An array of the <stop> SVG element defines the ramp of colors to use on a gradient, which is a child element to either the <linearGradient> or the <radialGradient> element.
 	    gradientStops: _react.PropTypes.oneOfType([_react.PropTypes.arrayOf(_react.PropTypes.object), _react.PropTypes.arrayOf(_react.PropTypes.node), _react.PropTypes.node]),
 	
-	    // The click handler callback function
+	    // The click handler callback function.
 	    onClick: _react.PropTypes.func,
 	
-	    // The radius of the inner circle
+	    // The radius of the inner circle.
 	    innerRadius: _react.PropTypes.number,
-	    // The radius of the outer circle
+	    // The radius of the outer circle.
 	    outerRadius: _react.PropTypes.number,
-	    // The margin between inner liquid and inner radius
+	    // The margin between inner liquid and inner radius.
 	    margin: _react.PropTypes.number,
 	
-	    // The wave amplitude
+	    // The wave amplitude.
 	    amplitude: _react.PropTypes.number,
-	    // The wave frequency inverse, the higer the number the fewer the waves
+	    // The wave frequency inverse, the higer the number the fewer the waves.
 	    frequency: _react.PropTypes.number,
 	
-	    // The fill and stroke for the outer arc
+	    // The fill and stroke for the outer arc.
 	    outerArcStyle: fillStroke,
-	    // The fill and stroke for the liquid
+	    // The fill and stroke for the liquid.
 	    liquidStyle: fillStroke,
-	    // The fill and stroke for the number part that is drenched in liquid
+	    // The fill and stroke for the number part that is drenched in liquid.
 	    liquidNumberStyle: fillStroke,
-	    // the fill and stroke of the number that is not drenched in liquid
+	    // The fill and stroke of the number that is not drenched in liquid.
 	    numberStyle: fillStroke
 	}, _class.defaultProps = {
 	    width: 400,
@@ -22554,7 +22553,7 @@
 	    animationEasing: 'easeCubicInOut',
 	    onAnimationProgress: function onAnimationProgress() {},
 	    onAnimationComplete: function onAnimationComplete() {},
-	    waveAnimation: true,
+	    waveAnimation: false,
 	    waveAnimationDuration: 2000,
 	    waveAnimationEasing: 'easeLinear',
 	    gradient: false,
