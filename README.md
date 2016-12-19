@@ -273,11 +273,9 @@ ReactDOM.render(
       <td>circleStyle</td>
       <td>Object</td>
       <td>
-<pre>
-{
+<pre>{
   fill: 'rgb(23, 139, 202)'
-}
-</pre>
+}</pre>
       </td>
       <td>The fill and stroke of the outer circle.</td>
     </tr>
@@ -285,11 +283,9 @@ ReactDOM.render(
       <td>waveStyle</td>
       <td>Object</td>
       <td>
-<pre>
-{
+<pre>{
   fill: 'rgb(23, 139, 202)'
-}
-</pre>
+}</pre>
       </td>
       <td>The fill and stroke of the fill wave.</td>
     </tr>
@@ -297,11 +293,9 @@ ReactDOM.render(
       <td>textStyle</td>
       <td>Object</td>
       <td>
-<pre>
-{
+<pre>{
   fill: 'rgb(0, 0, 0)'
-}
-</pre>
+}</pre>
       </td>
       <td>The fill and stroke of the value text when the wave does not overlap it.</td>
     </tr>
@@ -309,11 +303,9 @@ ReactDOM.render(
       <td>waveTextStyle</td>
       <td>Object</td>
       <td>
-<pre>
-{
+<pre>{
   fill: 'rgb(255, 255, 255)'
-}
-</pre>
+}</pre>
       </td>
       <td>The fill and stroke of the value text when the wave overlaps it.</td>
     </tr>
