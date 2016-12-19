@@ -1,20 +1,8 @@
 import { color } from 'd3-color';
+import { interpolateRgb } from 'd3-interpolate';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import LiquidFillGauge from '../src';
-
-const pickColor = (value, startColor, endColor) => {
-    const diffRed = color(endColor).r - color(startColor).r;
-    const diffGreen = color(endColor).g - color(startColor).g;
-    const diffBlue = color(endColor).b - color(startColor).b;
-    const percentFade = value / 100;
-
-    return 'rgb(' + [
-        (Math.floor(diffRed * percentFade) + color(startColor).r) % 256,
-        (Math.floor(diffGreen * percentFade) + color(startColor).g) % 256,
-        (Math.floor(diffBlue * percentFade) + color(startColor).b) % 256
-    ].join(' ,') + ')';
-};
 
 class App extends Component {
     state = {
@@ -24,7 +12,8 @@ class App extends Component {
     endColor = '#dc143c'; // crimson
 
     render() {
-        const fillColor = pickColor(this.state.value, this.startColor, this.endColor);
+        const interpolate = interpolateRgb(this.startColor, this.endColor);
+        const fillColor = interpolate(this.state.value / 100);
         const gradientStops = [
             {
                 key: '0%',
