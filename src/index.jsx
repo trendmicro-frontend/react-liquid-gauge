@@ -55,14 +55,6 @@ class LiquidFillGauge extends Component {
         waveAnimationDuration: PropTypes.number,
         // The d3 easing function name.
         waveAnimationEasing: PropTypes.string,
-        // The wave height as a percentage of the radius of the wave circle.
-        waveHeight: PropTypes.number,
-        // The number of full waves per width of the wave circle.
-        waveCount: PropTypes.number,
-        // The amount to initially offset the wave.
-        // 0 = no offset
-        // 1 = offset of one full wave
-        waveOffset: PropTypes.number,
 
         // Whether to apply linear gradients to fill the liquid element
         gradient: PropTypes.bool,
