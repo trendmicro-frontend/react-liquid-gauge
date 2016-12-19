@@ -33,7 +33,8 @@
     "react-component",
     "d3",
     "liquid",
-    "gauge"
+    "gauge",
+    "chart"
   ],
   "peerDependencies": {
     "react": "^0.14.0 || ^15.0.0"
