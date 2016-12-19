@@ -42,7 +42,7 @@ class LiquidFillGauge extends Component {
         animation: PropTypes.bool,
         // The amount of time in milliseconds to animate the chart.
         animationDuration: PropTypes.number,
-        // The d3 easing function name.
+        // [d3-ease](https://github.com/d3/d3-ease) function name. See the [easing explorer](http://bl.ocks. org/mbostock/248bac3b8e354a9103c4) for a visual demostration.
         animationEasing: PropTypes.string,
         // Will fire on animation progression.
         onAnimationProgress: PropTypes.func,
@@ -53,7 +53,7 @@ class LiquidFillGauge extends Component {
         waveAnimation: PropTypes.bool,
         // The amount of time in milliseconds for a full wave to enter the wave circle.
         waveAnimationDuration: PropTypes.number,
-        // The d3 easing function name.
+        // [d3-ease](https://github.com/d3/d3-ease) function name. See the [easing explorer](http://bl.ocks. org/mbostock/248bac3b8e354a9103c4) for a visual demostration.
         waveAnimationEasing: PropTypes.string,
 
         // Whether to apply linear gradients to fill the liquid element.
