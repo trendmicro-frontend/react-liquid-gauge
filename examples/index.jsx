@@ -18,7 +18,7 @@ const pickColor = (value, startColor, endColor) => {
 
 class App extends Component {
     state = {
-        value: Math.round(Math.random() * 100)
+        value: 50 //Math.round(Math.random() * 100)
     };
     startColor = '#6495ed'; // cornflowerblue
     endColor = '#dc143c'; // crimson
@@ -55,24 +55,16 @@ class App extends Component {
                     value={this.state.value}
                     textOffsetX={0}
                     textOffsetY={0}
-                    animation
+                    riseAnimation
                     waveAnimation
+                    waveFrequency={2}
+                    waveAmplitude={1}
                     gradient
                     gradientStops={gradientStops}
-                    amplitude={1}
-                    frequency={4}
-                    outerArcStyle={{
-                        fill: fillColor
-                    }}
-                    liquidStyle={{
-                        fill: fillColor
-                    }}
-                    liquidNumberStyle={{
-                        fill: 'rgb(255, 255, 255)'
-                    }}
-                    numberStyle={{
-                        fill: 'rgb(0, 0, 0)'
-                    }}
+                    circleStyle={{ fill: fillColor }}
+                    waveStyle={{ fill: fillColor }}
+                    textStyle={{ fill: 'rgb(0, 0, 0)' }}
+                    waveTextStyle={{ fill: 'rgb(255, 255, 255)' }}
                     onClick={() => {
                         this.setState({ value: Math.random() * 100 });
                     }}

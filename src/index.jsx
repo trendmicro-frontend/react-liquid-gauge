@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import shallowCompare from 'react-addons-shallow-compare';
 import { color } from 'd3-color';
 import * as ease from 'd3-ease';
-import { interpolate } from 'd3-interpolate';
+import { interpolateNumber } from 'd3-interpolate';
 import { scaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
 import { arc, area } from 'd3-shape';
@@ -17,6 +17,10 @@ const fillStroke = PropTypes.shape({
     fill: PropTypes.string,
     stroke: PropTypes.string
 });
+
+const ucfirst = (s) => {
+    return s && s[0].toUpperCase() + s.slice(1);
+};
 
 class LiquidFillGauge extends Component {
     static propTypes = {
@@ -39,22 +43,29 @@ class LiquidFillGauge extends Component {
         textOffsetY: PropTypes.number,
 
         // Whether to animate the chart.
-        animation: PropTypes.bool,
+        riseAnimation: PropTypes.bool,
         // The amount of time in milliseconds to animate the chart.
-        animationDuration: PropTypes.number,
-        // [d3-ease](https://github.com/d3/d3-ease) function name. See the [easing explorer](http://bl.ocks. org/mbostock/248bac3b8e354a9103c4) for a visual demostration.
-        animationEasing: PropTypes.string,
-        // Will fire on animation progression.
-        onAnimationProgress: PropTypes.func,
-        // Will fire on animation completion.
-        onAnimationComplete: PropTypes.func,
+        riseAnimationTime: PropTypes.number,
+        // [d3-ease](https://github.com/d3/d3-ease) options:
+        // See the [easing explorer](http://bl.ocks.org/mbostock/248bac3b8e354a9103c4) for a visual demostration.
+        riseAnimationEasing: PropTypes.string,
+        // Will fire on rise animation progression.
+        riseAnimationOnProgress: PropTypes.func,
+        // Will fire on rise animation completion.
+        riseAnimationOnComplete: PropTypes.func,
 
         // Controls if the wave scrolls or is static.
         waveAnimation: PropTypes.bool,
         // The amount of time in milliseconds for a full wave to enter the wave circle.
-        waveAnimationDuration: PropTypes.number,
-        // [d3-ease](https://github.com/d3/d3-ease) function name. See the [easing explorer](http://bl.ocks. org/mbostock/248bac3b8e354a9103c4) for a visual demostration.
+        waveAnimationTime: PropTypes.number,
+        // [d3-ease](https://github.com/d3/d3-ease) options:
+        // See the [easing explorer](http://bl.ocks.org/mbostock/248bac3b8e354a9103c4) for a visual demostration.
         waveAnimationEasing: PropTypes.string,
+
+        // The wave amplitude.
+        waveAmplitude: PropTypes.number,
+        // The wave frequency.
+        waveFrequency: PropTypes.number,
 
         // Whether to apply linear gradients to fill the liquid element.
         gradient: PropTypes.bool,
@@ -72,22 +83,17 @@ class LiquidFillGauge extends Component {
         innerRadius: PropTypes.number,
         // The radius of the outer circle.
         outerRadius: PropTypes.number,
-        // The margin between inner liquid and inner radius.
+        // The size of the gap between the outer circle and wave circle as a percentage of the outer circle's radius.
         margin: PropTypes.number,
 
-        // The wave amplitude.
-        amplitude: PropTypes.number,
-        // The wave frequency inverse, the higer the number the fewer the waves.
-        frequency: PropTypes.number,
-
-        // The fill and stroke for the outer arc.
-        outerArcStyle: fillStroke,
-        // The fill and stroke for the liquid.
-        liquidStyle: fillStroke,
-        // The fill and stroke for the number part that is drenched in liquid.
-        liquidNumberStyle: fillStroke,
-        // The fill and stroke of the number that is not drenched in liquid.
-        numberStyle: fillStroke
+        // The fill and stroke of the outer circle.
+        circleStyle: fillStroke,
+        // The fill and stroke of the fill wave.
+        waveStyle: fillStroke,
+        // The fill and stroke of the value text when the wave does not overlap it.
+        textStyle: fillStroke,
+        // The fill and stroke of the value text when the wave overlaps it.
+        waveTextStyle: fillStroke
     };
 
     static defaultProps = {
@@ -98,151 +104,158 @@ class LiquidFillGauge extends Component {
         textSize: 1,
         textOffsetX: 0,
         textOffsetY: 0,
-        animation: false,
-        animationDuration: 2000,
-        animationEasing: 'easeCubicInOut',
-        onAnimationProgress: () => {},
-        onAnimationComplete: () => {},
+        riseAnimation: false,
+        riseAnimationTime: 2000,
+        riseAnimationEasing: 'cubicInOut',
+        riseAnimationOnProgress: () => {},
+        riseAnimationOnComplete: () => {},
         waveAnimation: false,
-        waveAnimationDuration: 2000,
-        waveAnimationEasing: 'easeLinear',
+        waveAnimationTime: 2000,
+        waveAnimationEasing: 'linear',
+        waveFrequency: 2,
+        waveAmplitude: 1,
         gradient: false,
         gradientStops: null,
         onClick: () => {},
         innerRadius: 0.9,
         outerRadius: 1.0,
         margin: 0.025,
-        amplitude: 1,
-        frequency: 4,
-        outerArcStyle: {
+        circleStyle: {
             fill: 'rgb(23, 139, 202)'
         },
-        liquidStyle: {
+        waveStyle: {
             fill: 'rgb(23, 139, 202)'
         },
-        liquidNumberStyle: {
-            fill: 'rgb(164, 219, 248)'
+        textStyle: {
+            fill: 'rgb(0, 0, 0)'
         },
-        numberStyle: {
-            fill: 'rgb(4, 86, 129)'
+        waveTextStyle: {
+            fill: 'rgb(255, 255, 255)'
         }
     };
 
     componentDidMount() {
-        if (this.props.animation) {
-            this.animate();
-            return;
-        }
         this.draw();
     }
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.animation) {
-            this.animate();
-            return;
-        }
         this.draw();
     }
     shouldComponentUpdate(nextProps, nextState) {
         return shallowCompare(this, nextProps, nextState);
     }
-    setRes() {
-        const width = (this.props.width * (this.props.innerRadius - this.props.margin)) / 2;
-        const height = (this.props.height * (this.props.innerRadius - this.props.margin)) / 2;
+    draw() {
+        const data = [];
+        const samplePoints = 40;
+        for (let i = 0; i <= samplePoints * this.props.waveFrequency; ++i) {
+            data.push({
+                x: i / (samplePoints * this.props.waveFrequency),
+                y: i / samplePoints
+            });
+        }
 
-        this.arr = new Array(100);
         this.wave = select(this.clipPath)
-            .datum([this.props.value]);
-        this.text = select(this.container)
+            .datum(data)
+            .attr('T', '0');
+
+        const textElement = select(this.container)
             .selectAll('text')
             .selectAll('tspan.value');
-        this.x = scaleLinear()
-            .range([-width * 2, width * 2])
-            .domain([0, 100]);
-        this.y = scaleLinear()
-            .range([height, -height])
-            .domain([0, 100]);
-    }
-    draw() {
-        this.setRes();
 
-        const { amplitude, frequency, value, height } = this.props;
-        const clipArea = area()
-            .x((d, i) => this.x(i))
-            .y0((d, i) => this.y((amplitude * Math.sin(i / frequency)) + value))
-            .y1(d => (height / 2));
-        this.wave.attr('d', clipArea(this.arr));
-        this.text.text(Math.round(value));
-    }
-    animate() {
-        this.setRes();
-
-        const clipArea = area()
-            .x((d, i) => this.x(i))
-            .y1(d => (this.props.height / 2));
-
-        const waveScale = scaleLinear()
-            .range([0, this.props.amplitude, 0])
+        const waveHeightScale = scaleLinear()
+            .range([0, this.props.waveAmplitude, 0])
             .domain([0, 50, 100]);
+
+        const fillWidth = (this.props.width * (this.props.innerRadius - this.props.margin));
+        const waveScaleX = scaleLinear()
+            .range([-fillWidth, fillWidth])
+            .domain([0, 1]);
+
+        const fillHeight = (this.props.height * (this.props.innerRadius - this.props.margin));
+        const waveScaleY = scaleLinear()
+            .range([fillHeight / 2, -fillHeight / 2])
+            .domain([0, 100]);
 
         if (this.props.waveAnimation) {
             this.animateWave();
         }
 
-        const time = scaleLinear()
-            .range([0, 1])
-            .domain([0, this.props.animationDuration]);
-        // If the wave does not have an old value, then interpolate from 0 to value, else old to value.
-        const interpolateValue = interpolate(this.wave.node().old || 0, this.props.value);
-        const animationEasing = ease[this.props.animationEasing] ? ease[this.props.animationEasing] : ease[this.defaultProps.animationEasing];
-        const animationTimer = timer((t) => {
-            const { frequency } = this.props;
-            const value = interpolateValue(animationEasing(time(t)));
+        if (this.props.riseAnimation) {
+            const clipArea = area()
+                .x((d, i) => waveScaleX(d.x))
+                .y1(d => (this.props.height / 2));
+            const timeScale = scaleLinear()
+                .range([0, 1])
+                .domain([0, this.props.riseAnimationTime]);
+            // Use the old value if available
+            const interpolate = interpolateNumber(this.wave.node().oldValue || 0, this.props.value);
+            const easing = `ease${ucfirst(this.props.riseAnimationEasing)}`;
+            const easingFn = ease[easing] ? ease[easing] : ease.easeCubicInOut;
+            const riseAnimationTimer = timer((t) => {
+                const value = interpolate(easingFn(timeScale(t)));
+                clipArea.y0((d, i) => {
+                    const radians = Math.PI * 2 * (d.y * 2); // double width
+                    return waveScaleY(waveHeightScale(value) * Math.sin(radians) + value);
+                });
+                textElement.text(Math.round(value));
+                this.wave.attr('d', clipArea);
 
-            clipArea.y0((d, i) => this.y((waveScale(value) * Math.sin(i / frequency)) + value));
-
-            this.text.text(Math.round(value));
-            this.wave.attr('d', clipArea(this.arr));
-            this.props.onAnimationProgress({
-                value,
-                container: select(this.container)
-            });
-
-            if (t >= this.props.animationDuration) {
-                animationTimer.stop();
-
-                const value = interpolateValue(1);
-
-                clipArea.y0((d, i) => this.y((waveScale(value) * Math.sin(i / frequency)) + value));
-
-                this.text.text(Math.round(value));
-                this.wave.attr('d', clipArea(this.arr));
-
-                this.props.onAnimationComplete({
-                    value,
+                this.props.riseAnimationOnProgress({
+                    value: value,
                     container: select(this.container)
                 });
-            }
-        });
 
-        // Store the old node value so that we can animate from that point again
-        this.wave.node().old = this.props.value;
+                if (t >= this.props.riseAnimationTime) {
+                    riseAnimationTimer.stop();
+
+                    const value = interpolate(1);
+                    clipArea.y0((d, i) => {
+                        const radians = Math.PI * 2 * (d.y * 2); // double width
+                        return waveScaleY(waveHeightScale(value) * Math.sin(radians) + value);
+                    });
+
+                    textElement.text(Math.round(value));
+                    this.wave.attr('d', clipArea);
+
+                    this.props.riseAnimationOnComplete({
+                        value: value,
+                        container: select(this.container)
+                    });
+                }
+            });
+
+            // Store the old value that can be used for the next animation
+            this.wave.node().oldValue = this.props.value;
+        } else {
+            const value = this.props.value;
+            const clipArea = area()
+                .x((d, i) => waveScaleX(d.x))
+                .y0((d, i) => {
+                    const radians = Math.PI * 2 * (d.y * 2); // double width
+                    return waveScaleY(waveHeightScale(value) * Math.sin(radians) + value);
+                })
+                .y1(d => (this.props.height / 2));
+
+            this.wave.attr('d', clipArea);
+            textElement.text(Math.round(this.props.value));
+        }
     }
     animateWave() {
         const width = (this.props.width * (this.props.innerRadius - this.props.margin)) / 2;
         const waveAnimationScale = scaleLinear()
-            .range([-width / 2, width / 2])
+            .range([-width, width])
             .domain([0, 1]);
-        const waveAnimationEasing = ease[this.props.waveAnimationEasing] ? ease[this.props.waveAnimationEasing] : ease[this.defaultProps.waveAnimationEasing];
+        const easing = `ease${ucfirst(this.props.waveAnimationEasing)}`;
+        const easingFn = ease[easing] ? ease[easing] : ease.easeLinear;
 
         this.wave
             .attr('transform', 'translate(' + waveAnimationScale(this.wave.attr('T')) + ', 0)')
             .transition()
-            .duration(this.props.waveAnimationDuration * (1 - this.wave.attr('T')))
-            .ease(waveAnimationEasing)
+            .duration(this.props.waveAnimationTime * (1 - this.wave.attr('T')))
+            .ease(easingFn)
             .attr('transform', 'translate(' + waveAnimationScale(1) + ', 0)')
-            .attr('T', 1)
+            .attr('T', '1')
             .on('end', () => {
-                this.wave.attr('T', 0);
+                this.wave.attr('T', '0');
                 if (this.props.waveAnimation) {
                     this.animateWave();
                 }
@@ -251,8 +264,8 @@ class LiquidFillGauge extends Component {
     render() {
         const { style } = this.props;
         const radius = Math.min(this.props.height / 2, this.props.width / 2);
-        const liquidRadius = radius * (this.props.innerRadius - this.props.margin);
-        const outerArc = arc()
+        const fillCircleRadius = radius * (this.props.innerRadius - this.props.margin);
+        const circle = arc()
             .outerRadius(this.props.outerRadius * radius)
             .innerRadius(this.props.innerRadius * radius)
             .startAngle(0)
@@ -260,7 +273,7 @@ class LiquidFillGauge extends Component {
         const cX = (this.props.width / 2);
         const cY = (this.props.height / 2);
         const textPixels = (this.props.textSize * radius / 2);
-        const fillColor = this.props.liquidStyle.fill;
+        const fillColor = this.props.waveStyle.fill;
         const gradientStops = this.props.gradientStops || [
             {
                 key: '0%',
@@ -307,13 +320,13 @@ class LiquidFillGauge extends Component {
                             </clipPath>
                         </defs>
                         <text
-                            className="number"
+                            className="text"
                             style={{
                                 textAnchor: 'middle',
                                 fontSize: textPixels + 'px'
                             }}
-                            fill={this.props.numberStyle.fill}
-                            stroke={this.props.numberStyle.stroke}
+                            fill={this.props.textStyle.fill}
+                            stroke={this.props.textStyle.stroke}
                             transform={`translate(${this.props.textOffsetX},${this.props.textOffsetY})`}
                         >
                             <tspan className="value">{this.props.value}</tspan>
@@ -321,18 +334,18 @@ class LiquidFillGauge extends Component {
                         </text>
                         <g clipPath="url(#clip)">
                             <circle
-                                className="liquid"
-                                r={liquidRadius}
-                                fill={this.props.gradient ? 'url(#gradient)' : this.props.liquidStyle.fill}
+                                className="wave"
+                                r={fillCircleRadius}
+                                fill={this.props.gradient ? 'url(#gradient)' : this.props.waveStyle.fill}
                             />
                             <text
-                                className="liquidNumber"
+                                className="waveText"
                                 style={{
                                     textAnchor: 'middle',
                                     fontSize: textPixels + 'px'
                                 }}
-                                fill={this.props.liquidNumberStyle.fill}
-                                stroke={this.props.liquidNumberStyle.stroke}
+                                fill={this.props.waveTextStyle.fill}
+                                stroke={this.props.waveTextStyle.stroke}
                                 transform={`translate(${this.props.textOffsetX},${this.props.textOffsetY})`}
                             >
                                 <tspan className="value">{this.props.value}</tspan>
@@ -340,10 +353,10 @@ class LiquidFillGauge extends Component {
                             </text>
                         </g>
                         <path
-                            className="outerArc"
-                            d={outerArc()}
-                            fill={this.props.outerArcStyle.fill}
-                            stroke={this.props.outerArcStyle.stroke}
+                            className="circle"
+                            d={circle()}
+                            fill={this.props.circleStyle.fill}
+                            stroke={this.props.circleStyle.stroke}
                         />
                         <circle
                             r={radius}
