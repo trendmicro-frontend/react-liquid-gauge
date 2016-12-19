@@ -141,130 +141,34 @@ ReactDOM.render(
   </thead>
   <tbody>
     <tr>
+      <td>width</td>
+      <td>Number</td>
+      <td>400</td>
+      <td>The width of the component.</td>
+    </tr>
+    <tr>
+      <td>height</td>
+      <td>Number</td>
+      <td>400</td>
+      <td>The height of the component.</td>
+    </tr>
+    <tr>
       <td>value</td>
       <td>Number</td>
-      <td>100</td>
-      <td></td>
+      <td>0</td>
+      <td>The percentage value (0-100).</td>
     </tr>
     <tr>
-      <td>animate</td>
-      <td>Boolean</td>
-      <td>false</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>onAnimationProgress</td>
-      <td>Function(options)</td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>onAnimationEnd</td>
-      <td>Function(options)</td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>gradient</td>
-      <td>Boolean</td>
-      <td>false</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>gradientStops</td>
-      <td>Array</td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>onClick</td>
-      <td>Function(event)</td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>outerRadius</td>
-      <td>Number</td>
-      <td>1.0</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>innerRadius</td>
-      <td>Number</td>
-      <td>0.9</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>margin</td>
-      <td>Number</td>
-      <td>0.025</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>ease</td>
-      <td>Function</td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>animationTime</td>
-      <td>Number</td>
-      <td>2000</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>amplitude</td>
-      <td>Number</td>
-      <td>1</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>frequency</td>
-      <td>Number</td>
-      <td>5</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>outerArcStyle</td>
-      <td>Shape</td>
-      <td>{ fill: 'rgb(23, 139, 202)' }</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>liquidStyle</td>
-      <td>Shape</td>
-      <td>{ fill: 'rgb(23, 139, 202)' }</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>liquidNumberStyle</td>
-      <td>Shape</td>
-      <td>{ fill: 'rgb(164, 219, 248)' }</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>numberStyle</td>
-      <td>Shape</td>
-      <td>{ fill: 'rgb(4, 86, 129)' }</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>offsetX</td>
-      <td>Number</td>
-      <td>1</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>offsetY</td>
-      <td>Number</td>
-      <td>1</td>
-      <td></td>
+      <td>percentageSymbol</td>
+      <td>String</td>
+      <td>'%'</td>
+      <td>The percentage symbol (%).</td>
     </tr>
     <tr>
       <td>textSize</td>
       <td>Number</td>
       <td>1</td>
-      <td></td>
+      <td>The relative height of the text to display in the wave circle. 1 = 50%.</td>
     </tr>
     <tr>
       <td>textOffsetX</td>
@@ -279,10 +183,124 @@ ReactDOM.render(
       <td></td>
     </tr>
     <tr>
-      <td>percentageSymbol</td>
+      <td>animation</td>
+      <td>Boolean</td>
+      <td>false</td>
+      <td>Whether to animate the chart.</td>
+    </tr>
+    <tr>
+      <td>animationDuration</td>
+      <td>Number</td>
+      <td>2000</td>
+      <td>The amount of time in milliseconds to animate the chart.</td>
+    </tr>
+    <tr>
+      <td>animationEasing</td>
       <td>String</td>
-      <td>%</td>
+      <td>'easeCubicInOut'</td>
+      <td>The d3 easing function name.</td>
+    </tr>
+    <tr>
+      <td>onAnimationProgress</td>
+      <td>Function</td>
+      <td>Will fire on animation progression.</td>
       <td></td>
+    </tr>
+    <tr>
+      <td>onAnimationComplete</td>
+      <td>Function</td>
+      <td>Will fire on animation completion.</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>waveAnimation</td>
+      <td>Boolean</td>
+      <td>false</td>
+      <td>Controls if the wave scrolls or is static.</td>
+    </tr>
+    <tr>
+      <td>waveAnimationDuration</td>
+      <td>Number</td>
+      <td>2000</td>
+      <td>The amount of time in milliseconds for a full wave to enter the wave circle.</td>
+    </tr>
+    <tr>
+      <td>waveAnimationEasing</td>
+      <td>String</td>
+      <td>'easeLinear'</td>
+      <td>The d3 easing function name.</td>
+    </tr>
+    <tr>
+      <td>gradient</td>
+      <td>Boolean</td>
+      <td>false</td>
+      <td>Whether to apply linear gradients to fill the liquid element.</td>
+    </tr>
+    <tr>
+      <td>gradientStops</td>
+      <td>Node|Array</td>
+      <td></td>
+      <td>An array of the &lt;stop&gt; SVG element defines the ramp of colors to use on a gradient, which is a child element to either the &lt;linearGradient&gt; or the &lt;radialGradient&gt; element.</td>
+    </tr>
+    <tr>
+      <td>onClick</td>
+      <td>Function</td>
+      <td></td>
+      <td>The click handler callback function.</td>
+    </tr>
+    <tr>
+      <td>innerRadius</td>
+      <td>Number</td>
+      <td>0.9</td>
+      <td>The radius of the inner circle.</td>
+    </tr>
+    <tr>
+      <td>outerRadius</td>
+      <td>Number</td>
+      <td>1.0</td>
+      <td>The radius of the outer circle.</td>
+    </tr>
+    <tr>
+      <td>margin</td>
+      <td>Number</td>
+      <td>0.025</td>
+      <td>The margin between inner liquid and inner radius.</td>
+    </tr>
+    <tr>
+      <td>amplitude</td>
+      <td>Number</td>
+      <td>1</td>
+      <td>The wave amplitude.</td>
+    </tr>
+    <tr>
+      <td>frequency</td>
+      <td>Number</td>
+      <td>4</td>
+      <td>The wave frequency inverse, the higer the number the fewer the waves.</td>
+    </tr>
+    <tr>
+      <td>outerArcStyle</td>
+      <td>Object</td>
+      <td>{ fill: 'rgb(23, 139, 202)' }</td>
+      <td>The fill and stroke for the outer arc.</td>
+    </tr>
+    <tr>
+      <td>liquidStyle</td>
+      <td>Object</td>
+      <td>{ fill: 'rgb(23, 139, 202)' }</td>
+      <td>The fill and stroke for the liquid.</td>
+    </tr>
+    <tr>
+      <td>liquidNumberStyle</td>
+      <td>Object</td>
+      <td>{ fill: 'rgb(164, 219, 248)' }</td>
+      <td>The fill and stroke for the number part that is drenched in liquid.</td>
+    </tr>
+    <tr>
+      <td>numberStyle</td>
+      <td>Object</td>
+      <td>{ fill: 'rgb(4, 86, 129)' }</td>
+      <td>The fill and stroke of the number that is not drenched in liquid.</td>
     </tr>
   </tbody>
 </table>
