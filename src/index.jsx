@@ -103,7 +103,7 @@ class LiquidFillGauge extends Component {
         animationEasing: 'easeCubicInOut',
         onAnimationProgress: () => {},
         onAnimationComplete: () => {},
-        waveAnimation: true,
+        waveAnimation: false,
         waveAnimationDuration: 2000,
         waveAnimationEasing: 'easeLinear',
         gradient: false,
