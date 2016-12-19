@@ -42,16 +42,16 @@ class LiquidFillGauge extends Component {
         textOffsetX: PropTypes.number,
         textOffsetY: PropTypes.number,
 
-        // Whether to animate the chart.
+        // Controls if the wave should rise from 0 to it's full height, or start at it's full height.
         riseAnimation: PropTypes.bool,
-        // The amount of time in milliseconds to animate the chart.
+        // The amount of time in milliseconds for the wave to rise from 0 to it's final height.
         riseAnimationTime: PropTypes.number,
         // [d3-ease](https://github.com/d3/d3-ease) options:
         // See the [easing explorer](http://bl.ocks.org/mbostock/248bac3b8e354a9103c4) for a visual demostration.
         riseAnimationEasing: PropTypes.string,
-        // Will fire on rise animation progression.
+        // Progress callback function.
         riseAnimationOnProgress: PropTypes.func,
-        // Will fire on rise animation completion.
+        // Complete callback function.
         riseAnimationOnComplete: PropTypes.func,
 
         // Controls if the wave scrolls or is static.
@@ -64,10 +64,10 @@ class LiquidFillGauge extends Component {
 
         // The wave amplitude.
         waveAmplitude: PropTypes.number,
-        // The wave frequency.
+        // The number of full waves per width of the wave circle.
         waveFrequency: PropTypes.number,
 
-        // Whether to apply linear gradients to fill the liquid element.
+        // Whether to apply linear gradients to fill the wave circle.
         gradient: PropTypes.bool,
         // An array of the <stop> SVG element defines the ramp of colors to use on a gradient, which is a child element to either the <linearGradient> or the <radialGradient> element.
         gradientStops: PropTypes.oneOfType([
@@ -76,7 +76,7 @@ class LiquidFillGauge extends Component {
             PropTypes.node
         ]),
 
-        // The click handler callback function.
+        // onClick event handler.
         onClick: PropTypes.func,
 
         // The radius of the inner circle.
@@ -112,8 +112,8 @@ class LiquidFillGauge extends Component {
         waveAnimation: false,
         waveAnimationTime: 2000,
         waveAnimationEasing: 'linear',
-        waveFrequency: 2,
         waveAmplitude: 1,
+        waveFrequency: 2,
         gradient: false,
         gradientStops: null,
         onClick: () => {},
