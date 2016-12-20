@@ -1,0 +1,19 @@
+{
+  "name": "react-liquid-gauge",
+  "version": "1.0.0",
+  "description": "React Liquid Gauge component",
+  "authors": [
+    "Cheton Wu <cheton_wu@trend.com.tw>"
+  ],
+  "homepage": "https://github.com/trendmicro-frontend/react-liquid-gauge",
+  "snapshots": [],
+  "keywords": [
+    "react",
+    "react-component",
+    "d3",
+    "liquid",
+    "gauge",
+    "chart"
+  ],
+  "license": "MIT"
+}
