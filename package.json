@@ -7,7 +7,8 @@
     "lib"
   ],
   "scripts": {
-    "prepublish": "npm run lint && npm test && npm run clean && npm run build && npm run build-examples",
+    "prepublish": "npm run lint && npm test && npm run clean && npm run bowersync && npm run build && npm run build-examples",
+    "bowersync": "./scripts/bowersync",
     "build": "babel --out-dir ./lib ./src",
     "build-examples": "cd examples; webpack",
     "clean": "rm -f lib/*",
@@ -23,6 +24,13 @@
     "url": "git+https://github.com/trendmicro-frontend/react-liquid-gauge.git"
   },
   "author": "Cheton Wu <cheton@gmail.com>",
+  "contributors": [
+    {
+      "name": "Cheton Wu",
+      "email": "cheton@gmail.com",
+      "url": "https://github.com/cheton"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/trendmicro-frontend/react-liquid-gauge/issues"
