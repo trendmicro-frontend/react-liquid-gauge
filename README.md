@@ -4,7 +4,7 @@
 
 React Liquid Gauge component. It's heavily inspired by [D3 Liquid Fill Gauge](http://bl.ocks.org/brattonc/5e5ce9beee483220e2f6) and [react-liquidchart](https://github.com/arnthor3/react-liquidchart).
 
-[![demo](![react-liquid-gauge](https://cloud.githubusercontent.com/assets/447801/21498498/f1ab231e-cc67-11e6-830c-8e5db6b81af0.png))](http://trendmicro-frontend.github.io/react-liquid-gauge)
+[![react-liquid-gauge](https://cloud.githubusercontent.com/assets/447801/21498498/f1ab231e-cc67-11e6-830c-8e5db6b81af0.png)](http://trendmicro-frontend.github.io/react-liquid-gauge)
 
 Demo: http://trendmicro-frontend.github.io/react-liquid-gauge
 
