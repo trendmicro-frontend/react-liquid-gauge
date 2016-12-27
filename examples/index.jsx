@@ -48,6 +48,7 @@ class App extends Component {
                     textOffsetX={0}
                     textOffsetY={0}
                     textRenderer={(props) => {
+                        const value = Math.round(props.value);
                         const radius = Math.min(props.height / 2, props.width / 2);
                         const textPixels = (props.textSize * radius / 2);
                         const valueStyle = {
@@ -59,7 +60,7 @@ class App extends Component {
 
                         return (
                             <tspan>
-                                <tspan className="value" style={valueStyle}>{props.value}</tspan>
+                                <tspan className="value" style={valueStyle}>{value}</tspan>
                                 <tspan style={percentStyle}>{props.percent}</tspan>
                             </tspan>
                         );
