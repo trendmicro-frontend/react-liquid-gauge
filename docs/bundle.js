@@ -131,6 +131,32 @@
 	                    textSize: 1,
 	                    textOffsetX: 0,
 	                    textOffsetY: 0,
+	                    textRenderer: function textRenderer(props) {
+	                        var value = Math.round(props.value);
+	                        var radius = Math.min(props.height / 2, props.width / 2);
+	                        var textPixels = props.textSize * radius / 2;
+	                        var valueStyle = {
+	                            fontSize: textPixels
+	                        };
+	                        var percentStyle = {
+	                            fontSize: textPixels * 0.6
+	                        };
+	
+	                        return _react2.default.createElement(
+	                            'tspan',
+	                            null,
+	                            _react2.default.createElement(
+	                                'tspan',
+	                                { className: 'value', style: valueStyle },
+	                                value
+	                            ),
+	                            _react2.default.createElement(
+	                                'tspan',
+	                                { style: percentStyle },
+	                                props.percent
+	                            )
+	                        );
+	                    },
 	                    riseAnimation: true,
 	                    waveAnimation: true,
 	                    waveFrequency: 2,
@@ -22687,31 +22713,33 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactAddonsShallowCompare = __webpack_require__(181);
+	var _server = __webpack_require__(181);
+	
+	var _reactAddonsShallowCompare = __webpack_require__(185);
 	
 	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
 	
 	var _d3Color = __webpack_require__(1);
 	
-	var _d3Ease = __webpack_require__(183);
+	var _d3Ease = __webpack_require__(187);
 	
 	var ease = _interopRequireWildcard(_d3Ease);
 	
 	var _d3Interpolate = __webpack_require__(2);
 	
-	var _d3Scale = __webpack_require__(184);
+	var _d3Scale = __webpack_require__(188);
 	
-	var _d3Selection = __webpack_require__(190);
+	var _d3Selection = __webpack_require__(194);
 	
-	var _d3Shape = __webpack_require__(191);
+	var _d3Shape = __webpack_require__(195);
 	
-	var _d3Timer = __webpack_require__(193);
+	var _d3Timer = __webpack_require__(197);
 	
-	__webpack_require__(194);
+	__webpack_require__(198);
 	
-	var _hashid = __webpack_require__(196);
+	var _hashid = __webpack_require__(200);
 	
-	var _Gradient = __webpack_require__(197);
+	var _Gradient = __webpack_require__(201);
 	
 	var _Gradient2 = _interopRequireDefault(_Gradient);
 	
@@ -22769,8 +22797,6 @@
 	
 	            this.wave = (0, _d3Selection.select)(this.clipPath).datum(data).attr('T', '0');
 	
-	            var textElement = (0, _d3Selection.select)(this.container).selectAll('text').selectAll('tspan.value');
-	
 	            var waveHeightScale = (0, _d3Scale.scaleLinear)().range([0, this.props.waveAmplitude, 0]).domain([0, 50, 100]);
 	
 	            var fillWidth = this.props.width * (this.props.innerRadius - this.props.margin);
@@ -22801,8 +22827,13 @@
 	                            var radians = Math.PI * 2 * (d.y * 2); // double width
 	                            return waveScaleY(waveHeightScale(value) * Math.sin(radians) + value);
 	                        });
-	                        textElement.text(Math.round(value));
+	
 	                        _this2.wave.attr('d', clipArea);
+	
+	                        var renderedElement = _this2.props.textRenderer(_extends({}, _this2.props, {
+	                            value: value
+	                        }));
+	                        (0, _d3Selection.select)(_this2.container).selectAll('.text, .waveText').html((0, _server.renderToString)(renderedElement));
 	
 	                        _this2.props.riseAnimationOnProgress({
 	                            value: value,
@@ -22819,8 +22850,12 @@
 	                                    return waveScaleY(waveHeightScale(value) * Math.sin(radians) + value);
 	                                });
 	
-	                                textElement.text(Math.round(value));
 	                                _this2.wave.attr('d', clipArea);
+	
+	                                var renderedElement = _this2.props.textRenderer(_extends({}, _this2.props, {
+	                                    value: value
+	                                }));
+	                                (0, _d3Selection.select)(_this2.container).selectAll('.text, .waveText').html((0, _server.renderToString)(renderedElement));
 	
 	                                _this2.props.riseAnimationOnComplete({
 	                                    value: value,
@@ -22846,7 +22881,6 @@
 	                    });
 	
 	                    _this2.wave.attr('d', clipArea);
-	                    textElement.text(Math.round(_this2.props.value));
 	                })();
 	            }
 	        }
@@ -22882,10 +22916,6 @@
 	            var circle = (0, _d3Shape.arc)().outerRadius(this.props.outerRadius * radius).innerRadius(this.props.innerRadius * radius).startAngle(0).endAngle(Math.PI * 2);
 	            var cX = this.props.width / 2;
 	            var cY = this.props.height / 2;
-	            var textPixels = this.props.textSize * radius / 2;
-	            var percentStyle = {
-	                fontSize: textPixels * 0.6
-	            };
 	            var fillColor = this.props.waveStyle.fill;
 	            var gradientStops = this.props.gradientStops || [{
 	                key: '0%',
@@ -22941,21 +22971,11 @@
 	                            _extends({
 	                                className: 'text',
 	                                style: {
-	                                    textAnchor: 'middle',
-	                                    fontSize: textPixels
+	                                    textAnchor: 'middle'
 	                                },
 	                                transform: 'translate(' + this.props.textOffsetX + ',' + this.props.textOffsetY + ')'
 	                            }, this.props.textStyle),
-	                            _react2.default.createElement(
-	                                'tspan',
-	                                { className: 'value' },
-	                                this.props.value
-	                            ),
-	                            typeof this.props.percent !== 'string' ? this.props.percent : _react2.default.createElement(
-	                                'tspan',
-	                                { style: percentStyle },
-	                                this.props.percent
-	                            )
+	                            this.props.textRenderer(this.props)
 	                        ),
 	                        _react2.default.createElement(
 	                            'g',
@@ -22971,21 +22991,11 @@
 	                                _extends({
 	                                    className: 'waveText',
 	                                    style: {
-	                                        textAnchor: 'middle',
-	                                        fontSize: textPixels
+	                                        textAnchor: 'middle'
 	                                    },
 	                                    transform: 'translate(' + this.props.textOffsetX + ',' + this.props.textOffsetY + ')'
 	                                }, this.props.waveTextStyle),
-	                                _react2.default.createElement(
-	                                    'tspan',
-	                                    { className: 'value' },
-	                                    this.props.value
-	                                ),
-	                                typeof this.props.percent !== 'string' ? this.props.percent : _react2.default.createElement(
-	                                    'tspan',
-	                                    { style: percentStyle },
-	                                    this.props.percent
-	                                )
+	                                this.props.textRenderer(this.props)
 	                            )
 	                        ),
 	                        _react2.default.createElement('path', _extends({
@@ -22997,9 +23007,7 @@
 	                            fill: 'rgba(0, 0, 0, 0)',
 	                            stroke: 'rgba(0, 0, 0, 0)',
 	                            style: { pointerEvents: 'all' },
-	                            onClick: function onClick() {
-	                                _this4.props.onClick();
-	                            }
+	                            onClick: this.props.onClick
 	                        })
 	                    ),
 	                    _react2.default.createElement(
@@ -23036,6 +23044,9 @@
 	    textSize: _react.PropTypes.number,
 	    textOffsetX: _react.PropTypes.number,
 	    textOffsetY: _react.PropTypes.number,
+	
+	    // Specifies a custom text renderer for rendering a percent value.
+	    textRenderer: _react.PropTypes.func,
 	
 	    // Controls if the wave should rise from 0 to it's full height, or start at it's full height.
 	    riseAnimation: _react.PropTypes.bool,
@@ -23093,6 +23104,32 @@
 	    textSize: 1,
 	    textOffsetX: 0,
 	    textOffsetY: 0,
+	    textRenderer: function textRenderer(props) {
+	        var value = Math.round(props.value);
+	        var radius = Math.min(props.height / 2, props.width / 2);
+	        var textPixels = props.textSize * radius / 2;
+	        var valueStyle = {
+	            fontSize: textPixels
+	        };
+	        var percentStyle = {
+	            fontSize: textPixels * 0.6
+	        };
+	
+	        return _react2.default.createElement(
+	            'tspan',
+	            null,
+	            _react2.default.createElement(
+	                'tspan',
+	                { style: valueStyle },
+	                value
+	            ),
+	            typeof props.percent !== 'string' ? props.percent : _react2.default.createElement(
+	                'tspan',
+	                { style: percentStyle },
+	                props.percent
+	            )
+	        );
+	    },
 	    riseAnimation: false,
 	    riseAnimationTime: 2000,
 	    riseAnimationEasing: 'cubicInOut',
@@ -23130,10 +23167,170 @@
 /* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
 	module.exports = __webpack_require__(182);
+
 
 /***/ },
 /* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+	
+	'use strict';
+	
+	var ReactDefaultInjection = __webpack_require__(40);
+	var ReactServerRendering = __webpack_require__(183);
+	var ReactVersion = __webpack_require__(173);
+	
+	ReactDefaultInjection.inject();
+	
+	var ReactDOMServer = {
+	  renderToString: ReactServerRendering.renderToString,
+	  renderToStaticMarkup: ReactServerRendering.renderToStaticMarkup,
+	  version: ReactVersion
+	};
+	
+	module.exports = ReactDOMServer;
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+	'use strict';
+	
+	var _prodInvariant = __webpack_require__(37);
+	
+	var React = __webpack_require__(4);
+	var ReactDOMContainerInfo = __webpack_require__(169);
+	var ReactDefaultBatchingStrategy = __webpack_require__(142);
+	var ReactInstrumentation = __webpack_require__(64);
+	var ReactMarkupChecksum = __webpack_require__(171);
+	var ReactReconciler = __webpack_require__(61);
+	var ReactServerBatchingStrategy = __webpack_require__(184);
+	var ReactServerRenderingTransaction = __webpack_require__(135);
+	var ReactUpdates = __webpack_require__(58);
+	
+	var emptyObject = __webpack_require__(22);
+	var instantiateReactComponent = __webpack_require__(120);
+	var invariant = __webpack_require__(10);
+	
+	var pendingTransactions = 0;
+	
+	/**
+	 * @param {ReactElement} element
+	 * @return {string} the HTML markup
+	 */
+	function renderToStringImpl(element, makeStaticMarkup) {
+	  var transaction;
+	  try {
+	    ReactUpdates.injection.injectBatchingStrategy(ReactServerBatchingStrategy);
+	
+	    transaction = ReactServerRenderingTransaction.getPooled(makeStaticMarkup);
+	
+	    pendingTransactions++;
+	
+	    return transaction.perform(function () {
+	      var componentInstance = instantiateReactComponent(element, true);
+	      var markup = ReactReconciler.mountComponent(componentInstance, transaction, null, ReactDOMContainerInfo(), emptyObject, 0 /* parentDebugID */
+	      );
+	      if (process.env.NODE_ENV !== 'production') {
+	        ReactInstrumentation.debugTool.onUnmountComponent(componentInstance._debugID);
+	      }
+	      if (!makeStaticMarkup) {
+	        markup = ReactMarkupChecksum.addChecksumToMarkup(markup);
+	      }
+	      return markup;
+	    }, null);
+	  } finally {
+	    pendingTransactions--;
+	    ReactServerRenderingTransaction.release(transaction);
+	    // Revert to the DOM batching strategy since these two renderers
+	    // currently share these stateful modules.
+	    if (!pendingTransactions) {
+	      ReactUpdates.injection.injectBatchingStrategy(ReactDefaultBatchingStrategy);
+	    }
+	  }
+	}
+	
+	/**
+	 * Render a ReactElement to its initial HTML. This should only be used on the
+	 * server.
+	 * See https://facebook.github.io/react/docs/top-level-api.html#reactdomserver.rendertostring
+	 */
+	function renderToString(element) {
+	  !React.isValidElement(element) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'renderToString(): You must pass a valid ReactElement.') : _prodInvariant('46') : void 0;
+	  return renderToStringImpl(element, false);
+	}
+	
+	/**
+	 * Similar to renderToString, except this doesn't create extra DOM attributes
+	 * such as data-react-id that React uses internally.
+	 * See https://facebook.github.io/react/docs/top-level-api.html#reactdomserver.rendertostaticmarkup
+	 */
+	function renderToStaticMarkup(element) {
+	  !React.isValidElement(element) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'renderToStaticMarkup(): You must pass a valid ReactElement.') : _prodInvariant('47') : void 0;
+	  return renderToStringImpl(element, true);
+	}
+	
+	module.exports = {
+	  renderToString: renderToString,
+	  renderToStaticMarkup: renderToStaticMarkup
+	};
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+
+/***/ },
+/* 184 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2014-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+	
+	'use strict';
+	
+	var ReactServerBatchingStrategy = {
+	  isBatchingUpdates: false,
+	  batchedUpdates: function (callback) {
+	    // Don't do anything here. During the server rendering we don't want to
+	    // schedule any updates. We will simply ignore them.
+	  }
+	};
+	
+	module.exports = ReactServerBatchingStrategy;
+
+/***/ },
+/* 185 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(186);
+
+/***/ },
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -23162,7 +23359,7 @@
 	module.exports = shallowCompare;
 
 /***/ },
-/* 183 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-ease/ Version 1.0.2. Copyright 2016 Mike Bostock.
@@ -23427,12 +23624,12 @@
 
 
 /***/ },
-/* 184 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-scale/ Version 1.0.4. Copyright 2016 Mike Bostock.
 	(function (global, factory) {
-	   true ? factory(exports, __webpack_require__(185), __webpack_require__(186), __webpack_require__(2), __webpack_require__(187), __webpack_require__(188), __webpack_require__(189), __webpack_require__(1)) :
+	   true ? factory(exports, __webpack_require__(189), __webpack_require__(190), __webpack_require__(2), __webpack_require__(191), __webpack_require__(192), __webpack_require__(193), __webpack_require__(1)) :
 	  typeof define === 'function' && define.amd ? define(['exports', 'd3-array', 'd3-collection', 'd3-interpolate', 'd3-format', 'd3-time', 'd3-time-format', 'd3-color'], factory) :
 	  (factory((global.d3 = global.d3 || {}),global.d3,global.d3,global.d3,global.d3,global.d3,global.d3,global.d3));
 	}(this, (function (exports,d3Array,d3Collection,d3Interpolate,d3Format,d3Time,d3TimeFormat,d3Color) { 'use strict';
@@ -24336,7 +24533,7 @@
 
 
 /***/ },
-/* 185 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-array/ Version 1.0.2. Copyright 2016 Mike Bostock.
@@ -24807,7 +25004,7 @@
 
 
 /***/ },
-/* 186 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-collection/ Version 1.0.2. Copyright 2016 Mike Bostock.
@@ -25030,7 +25227,7 @@
 
 
 /***/ },
-/* 187 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-format/ Version 1.0.2. Copyright 2016 Mike Bostock.
@@ -25364,7 +25561,7 @@
 	}));
 
 /***/ },
-/* 188 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-time/ Version 1.0.4. Copyright 2016 Mike Bostock.
@@ -25748,12 +25945,12 @@
 
 
 /***/ },
-/* 189 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-time-format/ Version 2.0.3. Copyright 2016 Mike Bostock.
 	(function (global, factory) {
-	   true ? factory(exports, __webpack_require__(188)) :
+	   true ? factory(exports, __webpack_require__(192)) :
 	  typeof define === 'function' && define.amd ? define(['exports', 'd3-time'], factory) :
 	  (factory((global.d3 = global.d3 || {}),global.d3));
 	}(this, (function (exports,d3Time) { 'use strict';
@@ -26342,7 +26539,7 @@
 
 
 /***/ },
-/* 190 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-selection/ Version 1.0.3. Copyright 2016 Mike Bostock.
@@ -27321,12 +27518,12 @@
 
 
 /***/ },
-/* 191 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-shape/ Version 1.0.4. Copyright 2016 Mike Bostock.
 	(function (global, factory) {
-	   true ? factory(exports, __webpack_require__(192)) :
+	   true ? factory(exports, __webpack_require__(196)) :
 	  typeof define === 'function' && define.amd ? define(['exports', 'd3-path'], factory) :
 	  (factory((global.d3 = global.d3 || {}),global.d3));
 	}(this, (function (exports,d3Path) { 'use strict';
@@ -29145,7 +29342,7 @@
 
 
 /***/ },
-/* 192 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-path/ Version 1.0.3. Copyright 2016 Mike Bostock.
@@ -29290,7 +29487,7 @@
 
 
 /***/ },
-/* 193 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-timer/ Version 1.0.3. Copyright 2016 Mike Bostock.
@@ -29443,12 +29640,12 @@
 	})));
 
 /***/ },
-/* 194 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-transition/ Version 1.0.3. Copyright 2016 Mike Bostock.
 	(function (global, factory) {
-	   true ? factory(exports, __webpack_require__(190), __webpack_require__(195), __webpack_require__(193), __webpack_require__(2), __webpack_require__(1), __webpack_require__(183)) :
+	   true ? factory(exports, __webpack_require__(194), __webpack_require__(199), __webpack_require__(197), __webpack_require__(2), __webpack_require__(1), __webpack_require__(187)) :
 	  typeof define === 'function' && define.amd ? define(['exports', 'd3-selection', 'd3-dispatch', 'd3-timer', 'd3-interpolate', 'd3-color', 'd3-ease'], factory) :
 	  (factory((global.d3 = global.d3 || {}),global.d3,global.d3,global.d3,global.d3,global.d3,global.d3));
 	}(this, (function (exports,d3Selection,d3Dispatch,d3Timer,d3Interpolate,d3Color,d3Ease) { 'use strict';
@@ -30238,7 +30435,7 @@
 
 
 /***/ },
-/* 195 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-dispatch/ Version 1.0.2. Copyright 2016 Mike Bostock.
@@ -30339,7 +30536,7 @@
 
 
 /***/ },
-/* 196 */
+/* 200 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30422,7 +30619,7 @@
 	};
 
 /***/ },
-/* 197 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30464,4 +30661,4 @@
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=bundle.js.map?82aeeb5f60a493edbedc
+//# sourceMappingURL=bundle.js.map?31ad378a43338f7367d9
