@@ -136,19 +136,19 @@ ReactDOM.render(
       <td>value</td>
       <td>Number</td>
       <td>0</td>
-      <td>The percentage value (0-100).</td>
+      <td>The percent value (0-100).</td>
     </tr>
     <tr>
-      <td>percentageSymbol</td>
+      <td>percent</td>
       <td>String</td>
       <td>'%'</td>
-      <td>The percentage symbol (%).</td>
+      <td>The percent string (%) or SVG text element.</td>
     </tr>
     <tr>
       <td>textSize</td>
       <td>Number</td>
       <td>1</td>
-      <td>The relative height of the text to display in the wave circle. 1 = 50%.</td>
+      <td>The relative height of the text to display in the wave circle. A value of 1 equals 50% of the radius of the outer circle.</td>
     </tr>
     <tr>
       <td>textOffsetX</td>
@@ -266,7 +266,7 @@ ReactDOM.render(
   fill: 'rgb(23, 139, 202)'
 }</pre>
       </td>
-      <td>The fill and stroke of the outer circle.</td>
+      <td>The style of the outer circle.</td>
     </tr>
     <tr>
       <td>waveStyle</td>
@@ -276,7 +276,7 @@ ReactDOM.render(
   fill: 'rgb(23, 139, 202)'
 }</pre>
       </td>
-      <td>The fill and stroke of the fill wave.</td>
+      <td>The style of the fill wave.</td>
     </tr>
     <tr>
       <td>textStyle</td>
@@ -286,7 +286,7 @@ ReactDOM.render(
   fill: 'rgb(0, 0, 0)'
 }</pre>
       </td>
-      <td>The fill and stroke of the value text when the wave does not overlap it.</td>
+      <td>The style of the text when the wave does not overlap it.</td>
     </tr>
     <tr>
       <td>waveTextStyle</td>
@@ -296,7 +296,7 @@ ReactDOM.render(
   fill: 'rgb(255, 255, 255)'
 }</pre>
       </td>
-      <td>The fill and stroke of the value text when the wave overlaps it.</td>
+      <td>The style of the text when the wave overlaps it.</td>
     </tr>
   </tbody>
 </table>
