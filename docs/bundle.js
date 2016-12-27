@@ -22872,7 +22872,10 @@
 	        value: function render() {
 	            var _this4 = this;
 	
-	            var style = this.props.style;
+	            var _props = this.props,
+	                _props$id = _props.id,
+	                id = _props$id === undefined ? (0, _hashid.generate)() : _props$id,
+	                style = _props.style;
 	
 	            var radius = Math.min(this.props.height / 2, this.props.width / 2);
 	            var fillCircleRadius = radius * (this.props.innerRadius - this.props.margin);
@@ -22925,7 +22928,7 @@
 	                            null,
 	                            _react2.default.createElement(
 	                                'clipPath',
-	                                { id: 'clipWave-' + this.props.id },
+	                                { id: 'clipWave-' + id },
 	                                _react2.default.createElement('path', {
 	                                    ref: function ref(c) {
 	                                        _this4.clipPath = c;
@@ -22956,12 +22959,12 @@
 	                        ),
 	                        _react2.default.createElement(
 	                            'g',
-	                            { clipPath: 'url(#clipWave-' + this.props.id + ')' },
+	                            { clipPath: 'url(#clipWave-' + id + ')' },
 	                            _react2.default.createElement('circle', _extends({
 	                                className: 'wave',
 	                                r: fillCircleRadius
 	                            }, this.props.waveStyle, {
-	                                fill: this.props.gradient ? 'url(#gradient-' + this.props.id + ')' : this.props.waveStyle.fill
+	                                fill: this.props.gradient ? 'url(#gradient-' + id + ')' : this.props.waveStyle.fill
 	                            })),
 	                            _react2.default.createElement(
 	                                'text',
@@ -23001,7 +23004,7 @@
 	                    ),
 	                    _react2.default.createElement(
 	                        _Gradient2.default,
-	                        { id: 'gradient-' + this.props.id },
+	                        { id: 'gradient-' + id },
 	                        gradientStops.map(function (stop, index) {
 	                            if (!_react2.default.isValidElement(stop)) {
 	                                var key = stop.key || index;
@@ -23083,7 +23086,6 @@
 	    // The fill and stroke of the value text when the wave overlaps it.
 	    waveTextStyle: _react.PropTypes.object
 	}, _class.defaultProps = {
-	    id: (0, _hashid.generate)(),
 	    width: 400,
 	    height: 400,
 	    value: 0,
@@ -30462,4 +30464,4 @@
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=bundle.js.map?376a2d4336a92cfd1461
+//# sourceMappingURL=bundle.js.map?82aeeb5f60a493edbedc
