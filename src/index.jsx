@@ -92,7 +92,6 @@ class LiquidFillGauge extends Component {
     };
 
     static defaultProps = {
-        id: generate(),
         width: 400,
         height: 400,
         value: 0,
@@ -258,7 +257,10 @@ class LiquidFillGauge extends Component {
             });
     }
     render() {
-        const { style } = this.props;
+        const {
+            id = generate(),
+            style
+        } = this.props;
         const radius = Math.min(this.props.height / 2, this.props.width / 2);
         const fillCircleRadius = radius * (this.props.innerRadius - this.props.margin);
         const circle = arc()
@@ -310,7 +312,7 @@ class LiquidFillGauge extends Component {
                         transform={`translate(${cX},${cY})`}
                     >
                         <defs>
-                            <clipPath id={`clipWave-${this.props.id}`}>
+                            <clipPath id={`clipWave-${id}`}>
                                 <path
                                     ref={(c) => {
                                         this.clipPath = c;
@@ -333,12 +335,12 @@ class LiquidFillGauge extends Component {
                                 : <tspan style={percentStyle}>{this.props.percent}</tspan>
                             }
                         </text>
-                        <g clipPath={`url(#clipWave-${this.props.id})`}>
+                        <g clipPath={`url(#clipWave-${id})`}>
                             <circle
                                 className="wave"
                                 r={fillCircleRadius}
                                 {...this.props.waveStyle}
-                                fill={this.props.gradient ? `url(#gradient-${this.props.id})` : this.props.waveStyle.fill}
+                                fill={this.props.gradient ? `url(#gradient-${id})` : this.props.waveStyle.fill}
                             />
                             <text
                                 className="waveText"
@@ -371,7 +373,7 @@ class LiquidFillGauge extends Component {
                             }}
                         />
                     </g>
-                    <Gradient id={`gradient-${this.props.id}`}>
+                    <Gradient id={`gradient-${id}`}>
                         {gradientStops.map((stop, index) => {
                             if (!React.isValidElement(stop)) {
                                 const key = stop.key || index;
