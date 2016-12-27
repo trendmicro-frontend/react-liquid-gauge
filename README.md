@@ -146,7 +146,7 @@ ReactDOM.render(
     </tr>
     <tr>
       <td>percent</td>
-      <td>String</td>
+      <td>String|Node</td>
       <td>'%'</td>
       <td>The percent string (%) or SVG text element.</td>
     </tr>
