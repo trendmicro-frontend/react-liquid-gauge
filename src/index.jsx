@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { renderToString } from 'react-dom/server';
 import shallowCompare from 'react-addons-shallow-compare';
 import { color } from 'd3-color';
 import * as ease from 'd3-ease';
@@ -103,6 +104,7 @@ class LiquidFillGauge extends Component {
         textOffsetX: 0,
         textOffsetY: 0,
         textRenderer: (props) => {
+            const value = Math.round(props.value);
             const radius = Math.min(props.height / 2, props.width / 2);
             const textPixels = (props.textSize * radius / 2);
             const valueStyle = {
@@ -114,9 +116,7 @@ class LiquidFillGauge extends Component {
 
             return (
                 <tspan>
-                    <tspan className="value" style={valueStyle}>
-                        {props.value}
-                    </tspan>
+                    <tspan style={valueStyle}>{value}</tspan>
                     {(typeof props.percent !== 'string')
                         ? props.percent
                         : <tspan style={percentStyle}>{props.percent}</tspan>
@@ -177,10 +177,6 @@ class LiquidFillGauge extends Component {
             .datum(data)
             .attr('T', '0');
 
-        const textElement = select(this.container)
-            .selectAll('text')
-            .selectAll('tspan.value');
-
         const waveHeightScale = scaleLinear()
             .range([0, this.props.waveAmplitude, 0])
             .domain([0, 50, 100]);
@@ -216,8 +212,16 @@ class LiquidFillGauge extends Component {
                     const radians = Math.PI * 2 * (d.y * 2); // double width
                     return waveScaleY(waveHeightScale(value) * Math.sin(radians) + value);
                 });
-                textElement.text(Math.round(value));
+
                 this.wave.attr('d', clipArea);
+
+                const renderedElement = this.props.textRenderer({
+                    ...this.props,
+                    value: value
+                });
+                select(this.container)
+                    .selectAll('.text, .waveText')
+                    .html(renderToString(renderedElement));
 
                 this.props.riseAnimationOnProgress({
                     value: value,
@@ -233,8 +237,15 @@ class LiquidFillGauge extends Component {
                         return waveScaleY(waveHeightScale(value) * Math.sin(radians) + value);
                     });
 
-                    textElement.text(Math.round(value));
                     this.wave.attr('d', clipArea);
+
+                    const renderedElement = this.props.textRenderer({
+                        ...this.props,
+                        value: value
+                    });
+                    select(this.container)
+                        .selectAll('.text, .waveText')
+                        .html(renderToString(renderedElement));
 
                     this.props.riseAnimationOnComplete({
                         value: value,
@@ -256,7 +267,6 @@ class LiquidFillGauge extends Component {
                 .y1(d => (this.props.height / 2));
 
             this.wave.attr('d', clipArea);
-            textElement.text(Math.round(this.props.value));
         }
     }
     animateWave() {
