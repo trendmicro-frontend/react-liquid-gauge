@@ -37,6 +37,9 @@ class LiquidFillGauge extends Component {
         textOffsetX: PropTypes.number,
         textOffsetY: PropTypes.number,
 
+        // Specifies a custom text renderer for rendering a percent value.
+        textRenderer: PropTypes.func,
+
         // Controls if the wave should rise from 0 to it's full height, or start at it's full height.
         riseAnimation: PropTypes.bool,
         // The amount of time in milliseconds for the wave to rise from 0 to it's final height.
@@ -99,6 +102,28 @@ class LiquidFillGauge extends Component {
         textSize: 1,
         textOffsetX: 0,
         textOffsetY: 0,
+        textRenderer: (props) => {
+            const radius = Math.min(props.height / 2, props.width / 2);
+            const textPixels = (props.textSize * radius / 2);
+            const valueStyle = {
+                fontSize: textPixels
+            };
+            const percentStyle = {
+                fontSize: textPixels * 0.6
+            };
+
+            return (
+                <tspan>
+                    <tspan className="value" style={valueStyle}>
+                        {props.value}
+                    </tspan>
+                    {(typeof props.percent !== 'string')
+                        ? props.percent
+                        : <tspan style={percentStyle}>{props.percent}</tspan>
+                    }
+                </tspan>
+            );
+        },
         riseAnimation: false,
         riseAnimationTime: 2000,
         riseAnimationEasing: 'cubicInOut',
@@ -270,10 +295,6 @@ class LiquidFillGauge extends Component {
             .endAngle(Math.PI * 2);
         const cX = (this.props.width / 2);
         const cY = (this.props.height / 2);
-        const textPixels = (this.props.textSize * radius / 2);
-        const percentStyle = {
-            fontSize: textPixels * 0.6
-        };
         const fillColor = this.props.waveStyle.fill;
         const gradientStops = this.props.gradientStops || [
             {
@@ -323,17 +344,12 @@ class LiquidFillGauge extends Component {
                         <text
                             className="text"
                             style={{
-                                textAnchor: 'middle',
-                                fontSize: textPixels
+                                textAnchor: 'middle'
                             }}
                             transform={`translate(${this.props.textOffsetX},${this.props.textOffsetY})`}
                             {...this.props.textStyle}
                         >
-                            <tspan className="value">{this.props.value}</tspan>
-                            {(typeof this.props.percent !== 'string')
-                                ? this.props.percent
-                                : <tspan style={percentStyle}>{this.props.percent}</tspan>
-                            }
+                            {this.props.textRenderer(this.props)}
                         </text>
                         <g clipPath={`url(#clipWave-${id})`}>
                             <circle
@@ -345,17 +361,12 @@ class LiquidFillGauge extends Component {
                             <text
                                 className="waveText"
                                 style={{
-                                    textAnchor: 'middle',
-                                    fontSize: textPixels
+                                    textAnchor: 'middle'
                                 }}
                                 transform={`translate(${this.props.textOffsetX},${this.props.textOffsetY})`}
                                 {...this.props.waveTextStyle}
                             >
-                                <tspan className="value">{this.props.value}</tspan>
-                                {(typeof this.props.percent !== 'string')
-                                    ? this.props.percent
-                                    : <tspan style={percentStyle}>{this.props.percent}</tspan>
-                                }
+                                {this.props.textRenderer(this.props)}
                             </text>
                         </g>
                         <path
@@ -368,9 +379,7 @@ class LiquidFillGauge extends Component {
                             fill="rgba(0, 0, 0, 0)"
                             stroke="rgba(0, 0, 0, 0)"
                             style={{ pointerEvents: 'all' }}
-                            onClick={() => {
-                                this.props.onClick();
-                            }}
+                            onClick={this.props.onClick}
                         />
                     </g>
                     <Gradient id={`gradient-${id}`}>

@@ -182,6 +182,12 @@ ReactDOM.render(
       <td></td>
     </tr>
     <tr>
+      <td>textRenderer</td>
+      <td>Function(props)</td>
+      <td></td>
+      <td>Specifies a custom text renderer for rendering a percent value.</td>
+    </tr>
+    <tr>
       <td>riseAnimation</td>
       <td>Boolean</td>
       <td>false</td>
@@ -201,13 +207,13 @@ ReactDOM.render(
     </tr>
     <tr>
       <td>riseAnimationOnProgress</td>
-      <td>Function</td>
+      <td>Function({ value, container })</td>
       <td></td>
       <td>Progress callback function.</td>
     </tr>
     <tr>
       <td>riseAnimationOnComplete</td>
-      <td>Function</td>
+      <td>Function({ value, container })</td>
       <td></td>
       <td>Complete callback function.</td>
     </tr>
@@ -255,7 +261,7 @@ ReactDOM.render(
     </tr>
     <tr>
       <td>onClick</td>
-      <td>Function</td>
+      <td>Function(event)</td>
       <td></td>
       <td>onClick event handler.</td>
     </tr>
