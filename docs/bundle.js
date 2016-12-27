@@ -99,6 +99,7 @@
 	        value: function render() {
 	            var _this2 = this;
 	
+	            var radius = 200;
 	            var interpolate = (0, _d3Interpolate.interpolateRgb)(this.startColor, this.endColor);
 	            var fillColor = interpolate(this.state.value / 100);
 	            var gradientStops = [{
@@ -123,9 +124,11 @@
 	                null,
 	                _react2.default.createElement(_src2.default, {
 	                    style: { margin: '0 auto' },
-	                    width: 400,
-	                    height: 400,
+	                    width: radius * 2,
+	                    height: radius * 2,
 	                    value: this.state.value,
+	                    percent: '%',
+	                    textSize: 1,
 	                    textOffsetX: 0,
 	                    textOffsetY: 0,
 	                    riseAnimation: true,
@@ -134,10 +137,20 @@
 	                    waveAmplitude: 1,
 	                    gradient: true,
 	                    gradientStops: gradientStops,
-	                    circleStyle: { fill: fillColor },
-	                    waveStyle: { fill: fillColor },
-	                    textStyle: { fill: 'rgb(0, 0, 0)' },
-	                    waveTextStyle: { fill: 'rgb(255, 255, 255)' },
+	                    circleStyle: {
+	                        fill: fillColor
+	                    },
+	                    waveStyle: {
+	                        fill: fillColor
+	                    },
+	                    textStyle: {
+	                        fill: (0, _d3Color.color)('#444').toString(),
+	                        fontFamily: 'Arial'
+	                    },
+	                    waveTextStyle: {
+	                        fill: (0, _d3Color.color)('#fff').toString(),
+	                        fontFamily: 'Arial'
+	                    },
 	                    onClick: function onClick() {
 	                        _this2.setState({ value: Math.random() * 100 });
 	                    }
@@ -22696,7 +22709,9 @@
 	
 	__webpack_require__(194);
 	
-	var _Gradient = __webpack_require__(196);
+	var _hashid = __webpack_require__(196);
+	
+	var _Gradient = __webpack_require__(197);
 	
 	var _Gradient2 = _interopRequireDefault(_Gradient);
 	
@@ -22709,14 +22724,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	/**
-	 * PropType for fill and stroke..
-	 */
-	var fillStroke = _react.PropTypes.shape({
-	    fill: _react.PropTypes.string,
-	    stroke: _react.PropTypes.string
-	});
 	
 	var ucfirst = function ucfirst(s) {
 	    return s && s[0].toUpperCase() + s.slice(1);
@@ -22873,6 +22880,9 @@
 	            var cX = this.props.width / 2;
 	            var cY = this.props.height / 2;
 	            var textPixels = this.props.textSize * radius / 2;
+	            var percentStyle = {
+	                fontSize: textPixels * 0.6
+	            };
 	            var fillColor = this.props.waveStyle.fill;
 	            var gradientStops = this.props.gradientStops || [{
 	                key: '0%',
@@ -22915,7 +22925,7 @@
 	                            null,
 	                            _react2.default.createElement(
 	                                'clipPath',
-	                                { id: 'clip' },
+	                                { id: 'clipWave-' + this.props.id },
 	                                _react2.default.createElement('path', {
 	                                    ref: function ref(c) {
 	                                        _this4.clipPath = c;
@@ -22925,65 +22935,60 @@
 	                        ),
 	                        _react2.default.createElement(
 	                            'text',
-	                            {
+	                            _extends({
 	                                className: 'text',
 	                                style: {
 	                                    textAnchor: 'middle',
-	                                    fontSize: textPixels + 'px'
+	                                    fontSize: textPixels
 	                                },
-	                                fill: this.props.textStyle.fill,
-	                                stroke: this.props.textStyle.stroke,
 	                                transform: 'translate(' + this.props.textOffsetX + ',' + this.props.textOffsetY + ')'
-	                            },
+	                            }, this.props.textStyle),
 	                            _react2.default.createElement(
 	                                'tspan',
 	                                { className: 'value' },
 	                                this.props.value
 	                            ),
-	                            _react2.default.createElement(
+	                            typeof this.props.percent !== 'string' ? this.props.percent : _react2.default.createElement(
 	                                'tspan',
-	                                null,
-	                                this.props.percentageSymbol
+	                                { style: percentStyle },
+	                                this.props.percent
 	                            )
 	                        ),
 	                        _react2.default.createElement(
 	                            'g',
-	                            { clipPath: 'url(#clip)' },
-	                            _react2.default.createElement('circle', {
+	                            { clipPath: 'url(#clipWave-' + this.props.id + ')' },
+	                            _react2.default.createElement('circle', _extends({
 	                                className: 'wave',
-	                                r: fillCircleRadius,
-	                                fill: this.props.gradient ? 'url(#gradient)' : this.props.waveStyle.fill
-	                            }),
+	                                r: fillCircleRadius
+	                            }, this.props.waveStyle, {
+	                                fill: this.props.gradient ? 'url(#gradient-' + this.props.id + ')' : this.props.waveStyle.fill
+	                            })),
 	                            _react2.default.createElement(
 	                                'text',
-	                                {
+	                                _extends({
 	                                    className: 'waveText',
 	                                    style: {
 	                                        textAnchor: 'middle',
-	                                        fontSize: textPixels + 'px'
+	                                        fontSize: textPixels
 	                                    },
-	                                    fill: this.props.waveTextStyle.fill,
-	                                    stroke: this.props.waveTextStyle.stroke,
 	                                    transform: 'translate(' + this.props.textOffsetX + ',' + this.props.textOffsetY + ')'
-	                                },
+	                                }, this.props.waveTextStyle),
 	                                _react2.default.createElement(
 	                                    'tspan',
 	                                    { className: 'value' },
 	                                    this.props.value
 	                                ),
-	                                _react2.default.createElement(
+	                                typeof this.props.percent !== 'string' ? this.props.percent : _react2.default.createElement(
 	                                    'tspan',
-	                                    null,
-	                                    this.props.percentageSymbol
+	                                    { style: percentStyle },
+	                                    this.props.percent
 	                                )
 	                            )
 	                        ),
-	                        _react2.default.createElement('path', {
+	                        _react2.default.createElement('path', _extends({
 	                            className: 'circle',
-	                            d: circle(),
-	                            fill: this.props.circleStyle.fill,
-	                            stroke: this.props.circleStyle.stroke
-	                        }),
+	                            d: circle()
+	                        }, this.props.circleStyle)),
 	                        _react2.default.createElement('circle', {
 	                            r: radius,
 	                            fill: 'rgba(0, 0, 0, 0)',
@@ -22996,7 +23001,7 @@
 	                    ),
 	                    _react2.default.createElement(
 	                        _Gradient2.default,
-	                        { id: 'gradient' },
+	                        { id: 'gradient-' + this.props.id },
 	                        gradientStops.map(function (stop, index) {
 	                            if (!_react2.default.isValidElement(stop)) {
 	                                var key = stop.key || index;
@@ -23012,17 +23017,19 @@
 	
 	    return LiquidFillGauge;
 	}(_react.Component), _class.propTypes = {
+	    // A unique identifier (ID) to identify the element.
+	    id: _react.PropTypes.string,
 	    // The width of the component.
 	    width: _react.PropTypes.number,
 	    // The height of the component.
 	    height: _react.PropTypes.number,
 	
-	    // The percentage value (0-100).
+	    // The percent value (0-100).
 	    value: _react.PropTypes.number,
-	    // The percentage symbol (%).
-	    percentageSymbol: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.bool]),
+	    // The percent string (%) or SVG text element.
+	    percent: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.node]),
 	
-	    // The relative height of the text to display in the wave circle. 1 = 50%.
+	    // The relative height of the text to display in the wave circle. A value of 1 equals 50% of the radius of the outer circle.
 	    textSize: _react.PropTypes.number,
 	    textOffsetX: _react.PropTypes.number,
 	    textOffsetY: _react.PropTypes.number,
@@ -23068,18 +23075,19 @@
 	    margin: _react.PropTypes.number,
 	
 	    // The fill and stroke of the outer circle.
-	    circleStyle: fillStroke,
+	    circleStyle: _react.PropTypes.object,
 	    // The fill and stroke of the fill wave.
-	    waveStyle: fillStroke,
+	    waveStyle: _react.PropTypes.object,
 	    // The fill and stroke of the value text when the wave does not overlap it.
-	    textStyle: fillStroke,
+	    textStyle: _react.PropTypes.object,
 	    // The fill and stroke of the value text when the wave overlaps it.
-	    waveTextStyle: fillStroke
+	    waveTextStyle: _react.PropTypes.object
 	}, _class.defaultProps = {
+	    id: (0, _hashid.generate)(),
 	    width: 400,
 	    height: 400,
 	    value: 0,
-	    percentageSymbol: '%',
+	    percent: '%',
 	    textSize: 1,
 	    textOffsetX: 0,
 	    textOffsetY: 0,
@@ -30330,6 +30338,89 @@
 
 /***/ },
 /* 196 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	// Short ID Generation in JavaScript
+	// http://fiznool.com/blog/2014/11/16/short-id-generation-in-javascript/
+	
+	/**
+	 * The default alphabet is 25 numbers and lowercase letters.
+	 * Any numbers that look like letters and vice versa are removed:
+	 * 1 l, 0 o.
+	 * Also the following letters are not present, to prevent any
+	 * expletives: cfhistu
+	 */
+	var DEFAULT_ALPHABET = '23456789abdegjkmnpqrvwxyz';
+	
+	// Governs the length of the ID.
+	// With an alphabet of 25 chars,
+	// a length of 8 gives us 25^8 or
+	// 152,587,890,625 possibilities.
+	// Should be enough...
+	var DEFAULT_ID_LENGTH = 5;
+	
+	/**
+	 * Governs the number of times we should try to find
+	 * a unique value before giving up.
+	 * @type {Number}
+	 */
+	var UNIQUE_RETRIES = 9999;
+	
+	/**
+	 * Returns a randomly-generated friendly ID.
+	 * Note that the friendly ID is not guaranteed to be
+	 * unique to any other ID generated by this same method,
+	 * so it is up to you to check for uniqueness.
+	 * @return {String} friendly ID.
+	 */
+	var generate = exports.generate = function generate(options) {
+	    var _options = _extends({}, options),
+	        _options$alphabet = _options.alphabet,
+	        alphabet = _options$alphabet === undefined ? DEFAULT_ALPHABET : _options$alphabet,
+	        _options$idLength = _options.idLength,
+	        idLength = _options$idLength === undefined ? DEFAULT_ID_LENGTH : _options$idLength;
+	
+	    var rtn = '';
+	    for (var i = 0; i < idLength; i++) {
+	        rtn += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+	    }
+	    return rtn;
+	};
+	
+	/**
+	 * Tries to generate a unique ID that is not defined in the
+	 * `previous` array.
+	 * @param  {Array} previous The list of previous ids to avoid.
+	 * @return {String} A unique ID, or `null` if one could not be generated.
+	 */
+	var generateUnique = exports.generateUnique = function generateUnique(previous) {
+	    previous = previous || [];
+	    var retries = 0;
+	    var id = void 0;
+	
+	    // Try to generate a unique ID,
+	    // i.e. one that isn't in the previous.
+	    while (!id && retries < UNIQUE_RETRIES) {
+	        id = generate();
+	        if (previous.indexOf(id) !== -1) {
+	            id = null;
+	            retries++;
+	        }
+	    }
+	
+	    return id;
+	};
+
+/***/ },
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30371,4 +30462,4 @@
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=bundle.js.map?ae931c486c6814043e69
+//# sourceMappingURL=bundle.js.map?376a2d4336a92cfd1461
