@@ -10,14 +10,6 @@ import { timer } from 'd3-timer';
 import 'd3-transition';
 import Gradient from './Gradient';
 
-/**
- * PropType for fill and stroke..
- */
-const fillStroke = PropTypes.shape({
-    fill: PropTypes.string,
-    stroke: PropTypes.string
-});
-
 const ucfirst = (s) => {
     return s && s[0].toUpperCase() + s.slice(1);
 };
@@ -29,15 +21,15 @@ class LiquidFillGauge extends Component {
         // The height of the component.
         height: PropTypes.number,
 
-        // The percentage value (0-100).
+        // The percent value (0-100).
         value: PropTypes.number,
-        // The percentage symbol (%).
-        percentageSymbol: PropTypes.oneOfType([
+        // The percent string (%) or SVG text element.
+        percent: PropTypes.oneOfType([
             PropTypes.string,
-            PropTypes.bool
+            PropTypes.node
         ]),
 
-        // The relative height of the text to display in the wave circle. 1 = 50%.
+        // The relative height of the text to display in the wave circle. A value of 1 equals 50% of the radius of the outer circle.
         textSize: PropTypes.number,
         textOffsetX: PropTypes.number,
         textOffsetY: PropTypes.number,
@@ -87,20 +79,20 @@ class LiquidFillGauge extends Component {
         margin: PropTypes.number,
 
         // The fill and stroke of the outer circle.
-        circleStyle: fillStroke,
+        circleStyle: PropTypes.object,
         // The fill and stroke of the fill wave.
-        waveStyle: fillStroke,
+        waveStyle: PropTypes.object,
         // The fill and stroke of the value text when the wave does not overlap it.
-        textStyle: fillStroke,
+        textStyle: PropTypes.object,
         // The fill and stroke of the value text when the wave overlaps it.
-        waveTextStyle: fillStroke
+        waveTextStyle: PropTypes.object
     };
 
     static defaultProps = {
         width: 400,
         height: 400,
         value: 0,
-        percentageSymbol: '%',
+        percent: '%',
         textSize: 1,
         textOffsetX: 0,
         textOffsetY: 0,
@@ -273,6 +265,9 @@ class LiquidFillGauge extends Component {
         const cX = (this.props.width / 2);
         const cY = (this.props.height / 2);
         const textPixels = (this.props.textSize * radius / 2);
+        const percentStyle = {
+            fontSize: textPixels * 0.6
+        };
         const fillColor = this.props.waveStyle.fill;
         const gradientStops = this.props.gradientStops || [
             {
@@ -323,40 +318,44 @@ class LiquidFillGauge extends Component {
                             className="text"
                             style={{
                                 textAnchor: 'middle',
-                                fontSize: textPixels + 'px'
+                                fontSize: textPixels
                             }}
-                            fill={this.props.textStyle.fill}
-                            stroke={this.props.textStyle.stroke}
                             transform={`translate(${this.props.textOffsetX},${this.props.textOffsetY})`}
+                            {...this.props.textStyle}
                         >
                             <tspan className="value">{this.props.value}</tspan>
-                            <tspan>{this.props.percentageSymbol}</tspan>
+                            {(typeof this.props.percent !== 'string')
+                                ? this.props.percent
+                                : <tspan style={percentStyle}>{this.props.percent}</tspan>
+                            }
                         </text>
                         <g clipPath="url(#clip)">
                             <circle
                                 className="wave"
                                 r={fillCircleRadius}
+                                {...this.props.waveStyle}
                                 fill={this.props.gradient ? 'url(#gradient)' : this.props.waveStyle.fill}
                             />
                             <text
                                 className="waveText"
                                 style={{
                                     textAnchor: 'middle',
-                                    fontSize: textPixels + 'px'
+                                    fontSize: textPixels
                                 }}
-                                fill={this.props.waveTextStyle.fill}
-                                stroke={this.props.waveTextStyle.stroke}
                                 transform={`translate(${this.props.textOffsetX},${this.props.textOffsetY})`}
+                                {...this.props.waveTextStyle}
                             >
                                 <tspan className="value">{this.props.value}</tspan>
-                                <tspan>{this.props.percentageSymbol}</tspan>
+                                {(typeof this.props.percent !== 'string')
+                                    ? this.props.percent
+                                    : <tspan style={percentStyle}>{this.props.percent}</tspan>
+                                }
                             </text>
                         </g>
                         <path
                             className="circle"
                             d={circle()}
-                            fill={this.props.circleStyle.fill}
-                            stroke={this.props.circleStyle.stroke}
+                            {...this.props.circleStyle}
                         />
                         <circle
                             r={radius}
