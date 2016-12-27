@@ -8,6 +8,7 @@ import { select } from 'd3-selection';
 import { arc, area } from 'd3-shape';
 import { timer } from 'd3-timer';
 import 'd3-transition';
+import { generate } from './hashid';
 import Gradient from './Gradient';
 
 const ucfirst = (s) => {
@@ -16,6 +17,8 @@ const ucfirst = (s) => {
 
 class LiquidFillGauge extends Component {
     static propTypes = {
+        // A unique identifier (ID) to identify the element.
+        id: PropTypes.string,
         // The width of the component.
         width: PropTypes.number,
         // The height of the component.
@@ -89,6 +92,7 @@ class LiquidFillGauge extends Component {
     };
 
     static defaultProps = {
+        id: generate(),
         width: 400,
         height: 400,
         value: 0,
@@ -306,7 +310,7 @@ class LiquidFillGauge extends Component {
                         transform={`translate(${cX},${cY})`}
                     >
                         <defs>
-                            <clipPath id="clip">
+                            <clipPath id={`clipWave-${this.props.id}`}>
                                 <path
                                     ref={(c) => {
                                         this.clipPath = c;
@@ -329,12 +333,12 @@ class LiquidFillGauge extends Component {
                                 : <tspan style={percentStyle}>{this.props.percent}</tspan>
                             }
                         </text>
-                        <g clipPath="url(#clip)">
+                        <g clipPath={`url(#clipWave-${this.props.id})`}>
                             <circle
                                 className="wave"
                                 r={fillCircleRadius}
                                 {...this.props.waveStyle}
-                                fill={this.props.gradient ? 'url(#gradient)' : this.props.waveStyle.fill}
+                                fill={this.props.gradient ? `url(#gradient-${this.props.id})` : this.props.waveStyle.fill}
                             />
                             <text
                                 className="waveText"
@@ -367,7 +371,7 @@ class LiquidFillGauge extends Component {
                             }}
                         />
                     </g>
-                    <Gradient id="gradient">
+                    <Gradient id={`gradient-${this.props.id}`}>
                         {gradientStops.map((stop, index) => {
                             if (!React.isValidElement(stop)) {
                                 const key = stop.key || index;

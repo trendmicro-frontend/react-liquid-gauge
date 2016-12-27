@@ -121,6 +121,12 @@ ReactDOM.render(
   </thead>
   <tbody>
     <tr>
+      <td>id</td>
+      <td>String</td>
+      <td></td>
+      <td>A unique identifier (ID) to identify the element. Defaults to a unique random string.</td>
+    </tr>
+    <tr>
       <td>width</td>
       <td>Number</td>
       <td>400</td>
