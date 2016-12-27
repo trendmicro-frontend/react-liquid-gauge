@@ -68,6 +68,23 @@ class App extends Component {
                     textSize={1}
                     textOffsetX={0}
                     textOffsetY={0}
+                    textRenderer={(props) => {
+                        const radius = Math.min(props.height / 2, props.width / 2);
+                        const textPixels = (props.textSize * radius / 2);
+                        const valueStyle = {
+                            fontSize: textPixels
+                        };
+                        const percentStyle = {
+                            fontSize: textPixels * 0.6
+                        };
+
+                        return (
+                            <tspan>
+                                <tspan className="value" style={valueStyle}>{props.value}</tspan>
+                                <tspan style={percentStyle}>{props.percent}</tspan>
+                            </tspan>
+                        );
+                    }}
                     riseAnimation
                     waveAnimation
                     waveFrequency={2}
