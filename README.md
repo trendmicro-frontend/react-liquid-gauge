@@ -13,7 +13,7 @@ The [sample code](https://github.com/trendmicro-frontend/react-liquid-gauge/blob
 ## Installation
 
 ```
-npm install --save react react-liquid-gauge
+npm install --save react react-dom react-liquid-gauge
 ```
 
 ### Usage
@@ -69,6 +69,7 @@ class App extends Component {
                     textOffsetX={0}
                     textOffsetY={0}
                     textRenderer={(props) => {
+                        const value = Math.round(props.value);
                         const radius = Math.min(props.height / 2, props.width / 2);
                         const textPixels = (props.textSize * radius / 2);
                         const valueStyle = {
@@ -80,7 +81,7 @@ class App extends Component {
 
                         return (
                             <tspan>
-                                <tspan className="value" style={valueStyle}>{props.value}</tspan>
+                                <tspan className="value" style={valueStyle}>{value}</tspan>
                                 <tspan style={percentStyle}>{props.percent}</tspan>
                             </tspan>
                         );
