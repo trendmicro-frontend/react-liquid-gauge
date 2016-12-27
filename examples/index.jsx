@@ -12,6 +12,7 @@ class App extends Component {
     endColor = '#dc143c'; // crimson
 
     render() {
+        const radius = 200;
         const interpolate = interpolateRgb(this.startColor, this.endColor);
         const fillColor = interpolate(this.state.value / 100);
         const gradientStops = [
@@ -39,9 +40,11 @@ class App extends Component {
             <div>
                 <LiquidFillGauge
                     style={{ margin: '0 auto' }}
-                    width={400}
-                    height={400}
+                    width={radius * 2}
+                    height={radius * 2}
                     value={this.state.value}
+                    percent="%"
+                    textSize={1}
                     textOffsetX={0}
                     textOffsetY={0}
                     riseAnimation
@@ -50,10 +53,20 @@ class App extends Component {
                     waveAmplitude={1}
                     gradient
                     gradientStops={gradientStops}
-                    circleStyle={{ fill: fillColor }}
-                    waveStyle={{ fill: fillColor }}
-                    textStyle={{ fill: 'rgb(0, 0, 0)' }}
-                    waveTextStyle={{ fill: 'rgb(255, 255, 255)' }}
+                    circleStyle={{
+                        fill: fillColor
+                    }}
+                    waveStyle={{
+                        fill: fillColor
+                    }}
+                    textStyle={{
+                        fill: color('#444').toString(),
+                        fontFamily: 'Arial'
+                    }}
+                    waveTextStyle={{
+                        fill: color('#fff').toString(),
+                        fontFamily: 'Arial'
+                    }}
                     onClick={() => {
                         this.setState({ value: Math.random() * 100 });
                     }}
