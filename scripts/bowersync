@@ -17,4 +17,5 @@ bower.authors = pkg.contributors.map(author => {
     };
 });
 
-fs.writeFileSync(path.join(__dirname, '../bower.json'), JSON.stringify(bower, null, 2), 'utf8');
+var content = JSON.stringify(bower, null, 2);
+fs.writeFileSync(path.join(__dirname, '../bower.json'), content + '\n', 'utf8');
