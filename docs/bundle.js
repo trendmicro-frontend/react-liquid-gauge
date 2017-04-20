@@ -13865,42 +13865,6 @@ module.exports = ReactPropTypesSecret;
 
 /***/ }),
 
-/***/ "../node_modules/react-addons-shallow-compare/index.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- *
- * @providesModule shallowCompare
- */
-
-
-
-var shallowEqual = __webpack_require__("../node_modules/fbjs/lib/shallowEqual.js");
-
-/**
- * Does a shallow comparison for props and state.
- * See ReactComponentWithPureRenderMixin
- * See also https://facebook.github.io/react/docs/shallow-compare.html
- */
-function shallowCompare(instance, nextProps, nextState) {
-  return (
-    !shallowEqual(instance.props, nextProps) ||
-    !shallowEqual(instance.state, nextState)
-  );
-}
-
-module.exports = shallowCompare;
-
-
-/***/ }),
-
 /***/ "../node_modules/react-dom/index.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -34170,10 +34134,6 @@ var _react2 = _interopRequireDefault(_react);
 
 var _server = __webpack_require__("../node_modules/react-dom/server.js");
 
-var _reactAddonsShallowCompare = __webpack_require__("../node_modules/react-addons-shallow-compare/index.js");
-
-var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
-
 var _d3Color = __webpack_require__("../node_modules/d3-color/index.js");
 
 var _d3Ease = __webpack_require__("../node_modules/d3-ease/index.js");
@@ -34212,8 +34172,8 @@ var ucfirst = function ucfirst(s) {
     return s && s[0].toUpperCase() + s.slice(1);
 };
 
-var LiquidFillGauge = (_temp = _class = function (_Component) {
-    _inherits(LiquidFillGauge, _Component);
+var LiquidFillGauge = (_temp = _class = function (_PureComponent) {
+    _inherits(LiquidFillGauge, _PureComponent);
 
     function LiquidFillGauge() {
         _classCallCheck(this, LiquidFillGauge);
@@ -34230,11 +34190,6 @@ var LiquidFillGauge = (_temp = _class = function (_Component) {
         key: 'componentDidUpdate',
         value: function componentDidUpdate(prevProps, prevState) {
             this.draw();
-        }
-    }, {
-        key: 'shouldComponentUpdate',
-        value: function shouldComponentUpdate(nextProps, nextState) {
-            return (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
         }
     }, {
         key: 'draw',
@@ -34476,7 +34431,7 @@ var LiquidFillGauge = (_temp = _class = function (_Component) {
     }]);
 
     return LiquidFillGauge;
-}(_react.Component), _class.propTypes = {
+}(_react.PureComponent), _class.propTypes = {
     // A unique identifier (ID) to identify the element.
     id: _propTypes2.default.string,
     // The width of the component.
@@ -34787,4 +34742,4 @@ _reactDom2.default.render(_react2.default.createElement(App, null), document.get
 /***/ })
 
 /******/ });
-//# sourceMappingURL=bundle.js.map?3c6483f3dfcdd3995972
+//# sourceMappingURL=bundle.js.map?4bafa1ab86b0ed65d893

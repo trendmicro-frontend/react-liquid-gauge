@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { renderToString } from 'react-dom/server';
-import shallowCompare from 'react-addons-shallow-compare';
 import { color } from 'd3-color';
 import * as ease from 'd3-ease';
 import { interpolateNumber } from 'd3-interpolate';
@@ -17,7 +16,7 @@ const ucfirst = (s) => {
     return s && s[0].toUpperCase() + s.slice(1);
 };
 
-class LiquidFillGauge extends Component {
+class LiquidFillGauge extends PureComponent {
     static propTypes = {
         // A unique identifier (ID) to identify the element.
         id: PropTypes.string,
@@ -160,9 +159,6 @@ class LiquidFillGauge extends Component {
     }
     componentDidUpdate(prevProps, prevState) {
         this.draw();
-    }
-    shouldComponentUpdate(nextProps, nextState) {
-        return shallowCompare(this, nextProps, nextState);
     }
     draw() {
         const data = [];

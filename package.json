@@ -1,6 +1,6 @@
 {
   "name": "react-liquid-gauge",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "React Liquid Gauge component",
   "main": "lib/index.js",
   "files": [
@@ -57,11 +57,10 @@
     "d3-shape": "^1.0.4",
     "d3-timer": "^1.0.3",
     "d3-transition": "^1.0.3",
-    "prop-types": "^15.5.8",
-    "react-addons-shallow-compare": "^0.14.0 || ^15.0.0"
+    "prop-types": "^15.5.8"
   },
   "devDependencies": {
-    "@trendmicro/react-buttons": "~1.0.3",
+    "@trendmicro/react-buttons": "~1.0.4",
     "babel-cli": "~6.24.0",
     "babel-core": "~6.24.0",
     "babel-eslint": "~7.2.2",
