@@ -8,7 +8,7 @@ import { scaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
 import { arc, area } from 'd3-shape';
 import { timer } from 'd3-timer';
-import 'd3-transition';
+import './transition-polyfill';
 import { generate } from './hashid';
 import Gradient from './Gradient';
 
