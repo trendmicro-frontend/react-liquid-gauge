@@ -34004,6 +34004,8 @@ _d3Selection.selection.prototype.interrupt = _d3Selection.selection.prototype.in
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _d3Color = __webpack_require__("../node_modules/d3-color/index.js");
 
 var _d3Interpolate = __webpack_require__("../node_modules/d3-interpolate/index.js");
@@ -34028,11 +34030,104 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+var Gauge = function Gauge(_ref) {
+    var _ref$radius = _ref.radius,
+        radius = _ref$radius === undefined ? 200 : _ref$radius,
+        _ref$value = _ref.value,
+        value = _ref$value === undefined ? 0 : _ref$value,
+        props = _objectWithoutProperties(_ref, ['radius', 'value']);
+
+    var startColor = '#6495ed'; // cornflowerblue
+    var endColor = '#dc143c'; // crimson
+    var interpolate = (0, _d3Interpolate.interpolateRgb)(startColor, endColor);
+    var fillColor = interpolate(value / 100);
+    var gradientStops = [{
+        key: '0%',
+        stopColor: (0, _d3Color.color)(fillColor).darker(0.5).toString(),
+        stopOpacity: 1,
+        offset: '0%'
+    }, {
+        key: '50%',
+        stopColor: fillColor,
+        stopOpacity: 0.75,
+        offset: '50%'
+    }, {
+        key: '100%',
+        stopColor: (0, _d3Color.color)(fillColor).brighter(0.5).toString(),
+        stopOpacity: 0.5,
+        offset: '100%'
+    }];
+
+    return _react2.default.createElement(_src2.default, _extends({}, props, {
+        width: radius * 2,
+        height: radius * 2,
+        value: value,
+        percent: '%',
+        textSize: 1,
+        textOffsetX: 0,
+        textOffsetY: 0,
+        textRenderer: function textRenderer(_ref2) {
+            var value = _ref2.value,
+                width = _ref2.width,
+                height = _ref2.height,
+                textSize = _ref2.textSize,
+                percent = _ref2.percent;
+
+            value = Math.round(value);
+            var radius = Math.min(height / 2, width / 2);
+            var textPixels = textSize * radius / 2;
+            var valueStyle = {
+                fontSize: textPixels
+            };
+            var percentStyle = {
+                fontSize: textPixels * 0.6
+            };
+
+            return _react2.default.createElement(
+                'tspan',
+                null,
+                _react2.default.createElement(
+                    'tspan',
+                    { className: 'value', style: valueStyle },
+                    value
+                ),
+                _react2.default.createElement(
+                    'tspan',
+                    { style: percentStyle },
+                    percent
+                )
+            );
+        },
+        riseAnimation: true,
+        waveAnimation: true,
+        waveFrequency: 2,
+        waveAmplitude: 1,
+        gradient: true,
+        gradientStops: gradientStops,
+        circleStyle: {
+            fill: fillColor
+        },
+        waveStyle: {
+            fill: fillColor
+        },
+        textStyle: {
+            fill: (0, _d3Color.color)('#444').toString(),
+            fontFamily: 'Arial'
+        },
+        waveTextStyle: {
+            fill: (0, _d3Color.color)('#fff').toString(),
+            fontFamily: 'Arial'
+        }
+    }));
+};
+
 var App = function (_Component) {
     _inherits(App, _Component);
 
     function App() {
-        var _ref;
+        var _ref3;
 
         var _temp, _this, _ret;
 
@@ -34042,119 +34137,73 @@ var App = function (_Component) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-            value: 50
-        }, _this.startColor = '#6495ed', _this.endColor = '#dc143c', _temp), _possibleConstructorReturn(_this, _ret);
-    } // cornflowerblue
-
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref3 = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref3, [this].concat(args))), _this), _this.state = {
+            value1: Math.random() * 100,
+            value2: Math.random() * 100
+        }, _temp), _possibleConstructorReturn(_this, _ret);
+    }
 
     _createClass(App, [{
         key: 'render',
-        // crimson
-
         value: function render() {
             var _this2 = this;
 
-            var radius = 200;
-            var interpolate = (0, _d3Interpolate.interpolateRgb)(this.startColor, this.endColor);
-            var fillColor = interpolate(this.state.value / 100);
-            var gradientStops = [{
-                key: '0%',
-                stopColor: (0, _d3Color.color)(fillColor).darker(0.5).toString(),
-                stopOpacity: 1,
-                offset: '0%'
-            }, {
-                key: '50%',
-                stopColor: fillColor,
-                stopOpacity: 0.75,
-                offset: '50%'
-            }, {
-                key: '100%',
-                stopColor: (0, _d3Color.color)(fillColor).brighter(0.5).toString(),
-                stopOpacity: 0.5,
-                offset: '100%'
-            }];
-
             return _react2.default.createElement(
                 'div',
-                null,
-                _react2.default.createElement(_src2.default, {
-                    style: { margin: '0 auto' },
-                    width: radius * 2,
-                    height: radius * 2,
-                    value: this.state.value,
-                    percent: '%',
-                    textSize: 1,
-                    textOffsetX: 0,
-                    textOffsetY: 0,
-                    textRenderer: function textRenderer(props) {
-                        var value = Math.round(props.value);
-                        var radius = Math.min(props.height / 2, props.width / 2);
-                        var textPixels = props.textSize * radius / 2;
-                        var valueStyle = {
-                            fontSize: textPixels
-                        };
-                        var percentStyle = {
-                            fontSize: textPixels * 0.6
-                        };
-
-                        return _react2.default.createElement(
-                            'tspan',
-                            null,
-                            _react2.default.createElement(
-                                'tspan',
-                                { className: 'value', style: valueStyle },
-                                value
-                            ),
-                            _react2.default.createElement(
-                                'tspan',
-                                { style: percentStyle },
-                                props.percent
-                            )
-                        );
-                    },
-                    riseAnimation: true,
-                    waveAnimation: true,
-                    waveFrequency: 2,
-                    waveAmplitude: 1,
-                    gradient: true,
-                    gradientStops: gradientStops,
-                    circleStyle: {
-                        fill: fillColor
-                    },
-                    waveStyle: {
-                        fill: fillColor
-                    },
-                    textStyle: {
-                        fill: (0, _d3Color.color)('#444').toString(),
-                        fontFamily: 'Arial'
-                    },
-                    waveTextStyle: {
-                        fill: (0, _d3Color.color)('#fff').toString(),
-                        fontFamily: 'Arial'
-                    },
-                    onClick: function onClick() {
-                        _this2.setState({ value: Math.random() * 100 });
-                    }
-                }),
+                { className: 'container-fluid' },
                 _react2.default.createElement(
                     'div',
-                    {
-                        style: {
-                            margin: '20px auto',
-                            width: 120
-                        }
-                    },
+                    { className: 'row' },
                     _react2.default.createElement(
-                        'button',
-                        {
-                            type: 'button',
-                            className: 'btn btn-default btn-block',
+                        'div',
+                        { className: 'col-md-6 col-sm-12' },
+                        _react2.default.createElement(Gauge, {
+                            style: { margin: '0 auto 20px auto' },
+                            radius: 200,
+                            value: this.state.value1,
                             onClick: function onClick() {
-                                _this2.setState({ value: Math.random() * 100 });
+                                _this2.setState({ value1: Math.random() * 100 });
+                            }
+                        })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'col-md-6 col-sm-12' },
+                        _react2.default.createElement(Gauge, {
+                            style: { margin: '0 auto 20px auto' },
+                            radius: 200,
+                            value: this.state.value2,
+                            onClick: function onClick() {
+                                _this2.setState({ value2: Math.random() * 100 });
+                            }
+                        })
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'row' },
+                    _react2.default.createElement(
+                        'div',
+                        {
+                            style: {
+                                margin: '20px auto',
+                                width: 120
                             }
                         },
-                        'Refresh'
+                        _react2.default.createElement(
+                            'button',
+                            {
+                                type: 'button',
+                                className: 'btn btn-default btn-block',
+                                onClick: function onClick() {
+                                    _this2.setState({
+                                        value1: Math.random() * 100,
+                                        value2: Math.random() * 100
+                                    });
+                                }
+                            },
+                            'Refresh'
+                        )
                     )
                 )
             );
@@ -34169,4 +34218,4 @@ _reactDom2.default.render(_react2.default.createElement(App, null), document.get
 /***/ })
 
 /******/ });
-//# sourceMappingURL=bundle.js.map?bb668d4855b9eb130789
+//# sourceMappingURL=bundle.js.map?77ba9c370ff1c8053340
