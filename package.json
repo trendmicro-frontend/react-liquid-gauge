@@ -1,6 +1,6 @@
 {
   "name": "react-liquid-gauge",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "React Liquid Gauge component",
   "main": "lib/index.js",
   "files": [
