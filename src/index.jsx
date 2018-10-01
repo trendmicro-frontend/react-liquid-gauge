@@ -332,7 +332,7 @@ class LiquidFillGauge extends PureComponent {
                     ...style
                 }}
             >
-                <svg width="100%" height="100%">
+                <svg width="100%" height="100%" viewBox={`0 0 ${this.props.width} ${this.props.height}`}>
                     <g
                         ref={(c) => {
                             this.container = c;
