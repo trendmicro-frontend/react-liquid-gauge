@@ -21,15 +21,9 @@ class LiquidFillGauge extends PureComponent {
         // A unique identifier (ID) to identify the element.
         id: PropTypes.string,
         // The width of the component.
-        width: PropTypes.oneOfType([
-            PropTypes.number,
-            PropTypes.string
-        ]),
+        width: PropTypes.number,
         // The height of the component.
-        height: PropTypes.oneOfType([
-            PropTypes.number,
-            PropTypes.string
-        ]),
+        height: PropTypes.number,
 
         // The percent value (0-100).
         value: PropTypes.number,
@@ -102,8 +96,8 @@ class LiquidFillGauge extends PureComponent {
     };
 
     static defaultProps = {
-        width: '100%',
-        height: '100%',
+        width: 400,
+        height: 400,
         value: 0,
         percent: '%',
         textSize: 1,
