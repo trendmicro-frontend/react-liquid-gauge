@@ -23,14 +23,7 @@
     "type": "git",
     "url": "git+https://github.com/trendmicro-frontend/react-liquid-gauge.git"
   },
-  "author": "Cheton Wu <cheton@gmail.com>",
-  "contributors": [
-    {
-      "name": "Cheton Wu",
-      "email": "cheton@gmail.com",
-      "url": "https://github.com/cheton"
-    }
-  ],
+  "author": "Cheton Wu",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/trendmicro-frontend/react-liquid-gauge/issues"
