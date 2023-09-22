@@ -1,13 +1,6 @@
 {
   "name": "react-liquid-gauge",
   "description": "React Liquid Gauge component",
-  "authors": [
-    {
-      "name": "Cheton Wu",
-      "email": "cheton@gmail.com",
-      "homepage": "https://github.com/cheton"
-    }
-  ],
   "homepage": "https://github.com/trendmicro-frontend/react-liquid-gauge",
   "snapshots": [],
   "keywords": [
